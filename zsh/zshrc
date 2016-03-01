@@ -7,7 +7,7 @@
 # time that oh-my-zsh is loaded.
 # Preferred options: robbyrussell, soliah, kafeitu, gallifrey, nebirhos, 
 # philips, cypher, dstufft, risto, half-life, jbergantine, norm, essembeh
-# fina (should be personalized more)
+# fina (should be personalized more), murilasso, nebirhos
 ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use hyphen-insensitive completion. Case

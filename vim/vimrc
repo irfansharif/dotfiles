@@ -1,8 +1,10 @@
-" Use the Solarized Dark theme, syntax highlighting
+" Use the Solarized Dark theme, syntax highlighting, using pathogen
 set background=dark
 colorscheme solarized
 let g:solarized_termtrans=1
 syntax on
+execute pathogen#infect()
+filetype plugin indent on
 
 " Make Vim more useful, use OS clipboard
 set no compatible
