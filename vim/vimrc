@@ -1,20 +1,20 @@
 " Use the Solarized Dark theme, syntax highlighting, using pathogen
 set background=dark
 colorscheme solarized
-let g:solarized_termtrans=1
 syntax on
-execute pathogen#infect()
+set autoindent
+set expandtab
 filetype plugin indent on
+let g:solarized_termtrans=1
+execute pathogen#infect()
 
 " Make Vim more useful, use OS clipboard
-set no compatible
+set nocompatible
 set clipboard=unnamed
 
-" Change mapleader, tab width & show 'invisible' characters
+" Change mapleader, tab width
 let mapleader=","
-set tabstop=2
-set lcs=trail:·,nbsp:_
-set list
+set tabstop=2 shiftwidth=2 softtabstop=2
 
 " Ignore case of searches, dynamic highlighting, default global search flag
 set ignorecase
@@ -31,7 +31,7 @@ set noeol
 
 " Centralize backups, swapfiles and undo history, skip backups editing files in certain directories
 set backupdir=~/.vim/backups
-set directory=~/.vim/swaps
+set directory=.,~/.vim/swaps
 if exists("&undodir")
 	set undodir=~/.vim/undo
 endif
@@ -62,3 +62,12 @@ noremap <leader>ss :call StripWhitespace()<CR>
 
 " Custom mappings
 imap jk <Esc>
+
+" Airline settings
+set t_Co=256
+let g:airline_powerline_fonts=1
+let g:airline_theme='solarized'
+
+" Line number settings, git gutter settings
+set number
+highlight LineNr cterm=NONE ctermbg=NONE
