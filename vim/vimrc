@@ -9,23 +9,23 @@ let g:solarized_termtrans=1
 " Using pathogen for package management
 execute pathogen#infect()
 
-set nocompatible													" Make Vim more useful
-set clipboard=unnamed											" use OS clipboard
+set nocompatible                          " Make Vim more useful
+set clipboard=unnamed                     " use OS clipboard
 
-let mapleader=","													" Change mapleader
+let mapleader=","                         " Change mapleader
 set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
+set modelines=1                           " Last comment line in each file reserved to file specific
+                                          " vim actions. See :help modelines
 
-set ignorecase														" Ignore case of searches
-set incsearch															" Dynamic highlighting
-set gdefault															" Default global search flag
+set ignorecase                            " Ignore case of searches
+set incsearch                             " Dynamic highlighting
+set gdefault                              " Default global search flag
 
 set wildmenu                              " Better command-line completion
 set lazyredraw                            " Faster rendering redrawing command options
 set ttyfast                               " Faster terminal connections
 
-" Don’t add empty newlines at the end of files
-set binary
-set noeol
+set noeol                                 " Don’t add empty newlines at the end of files
 
 " Centralize backups, swapfiles and undo history, skip backups editing files in certain directories
 set backupdir=~/.vim/backups
@@ -34,6 +34,7 @@ if exists("&undodir")
 	set undodir=~/.vim/undo
 endif
 set backupskip=/tmp/*,/private/tmp/*
+set writebackup
 
 " Skip intro message when starting Vim
 set shortmess=atI
@@ -41,27 +42,38 @@ set ruler
 set nostartofline                         " Show cursor position, don't reset cursor to start of line
 set cursorline                            " Highlight current cursor line
 
-" Show the current mode, filename in titlebar, show partial command as being typed
-set showmode
-set title
-set showcmd
-set showmatch															" Highlight matching parenthesis
+set showmode                              " Show current mode
+set title                                 " Show filename in titlebar
+set showcmd                               " Show partial command as being typed
+set showmatch                             " Highlight matching parenthesis
 
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
 
+" Functions {{{
 " Strip trailing white space (,ss)
-function! strip_white_spaces()
-	let save_cursor = getpos(".")
-	let old_query = getreg('/')
-	:%s/\s\+$//e
-	call setpos('.', save_cursor)
-	call setreg('/', old_query)
+function! StripWhiteSpace()
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call strip_white_spaces()<CR>
+nnoremap sws :call StripWhiteSpace()<CR>
 
-" Custom mappings
+" Toggle number view
+function! ToggleNumber()
+  if(&relativenumber == 1)
+    set norelativenumber
+      set number
+    else
+      set relativenumber
+  endif
+endfunc
+noremap tn :call ToggleNumber()<CR>
+" }}}
 
+" Mappings {{{
 " Quicker exit from insert mode
 imap jk <Esc>
 
@@ -72,13 +84,34 @@ nnoremap k gk
 " Move to beginning/end of line, $ & ^ are too far away
 nnoremap B ^
 nnoremap E $
-
 " Unbind defaults, force yourself to use B/E
 nnoremap $ <nop>
 nnoremap ^ <nop>
 
 " Space opens/closes folds
 nnoremap <space> za
+" Super undo: ,u
+nnoremap <leader>u :GundoToggle<CR>
+" Highlight last inserted text
+nnoremap gV `[v`]
+
+" Edit .vimrc/.zshrc and load .vimrc bindings
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" Save session/current assortment of windows so they're there next time you
+" open Vim. Reopen saved session by running vim -S
+nnoremap <leader>s :mksession<CR>
+" Silver searcher shortcut, ag.vim plugin
+nnoremap <leader>a :Ag
+" }}}
+
+" CtrlP settings
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
 " Airline settings, theme: solarized
 set t_Co=256
@@ -94,3 +127,5 @@ set foldenable
 set foldlevelstart=10                     " Opens most folds by default
 set foldnestmax=4                         " 4 nested fold max
 set foldmethod=syntax
+
+" vim:foldmethod=marker:foldlevel=0
