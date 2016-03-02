@@ -1,29 +1,27 @@
-" Use the Solarized Dark theme, syntax highlighting, using pathogen
-set background=dark
-colorscheme solarized
-syntax on
-set autoindent
-set expandtab
-filetype plugin indent on
+set background=dark			                  " Dark background
+colorscheme solarized											" Other options: pablo
+syntax on																	" Syntax highlighting
+set autoindent														" Autoindent
+set expandtab															" Tabs are spaces
+filetype plugin indent on									" Load filetype-specific indent files
 let g:solarized_termtrans=1
+
+" Using pathogen for package management
 execute pathogen#infect()
 
-" Make Vim more useful, use OS clipboard
-set nocompatible
-set clipboard=unnamed
+set nocompatible													" Make Vim more useful
+set clipboard=unnamed											" use OS clipboard
 
-" Change mapleader, tab width
-let mapleader=","
-set tabstop=2 shiftwidth=2 softtabstop=2
+let mapleader=","													" Change mapleader
+set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
 
-" Ignore case of searches, dynamic highlighting, default global search flag
-set ignorecase
-set incsearch
-set gdefault
+set ignorecase														" Ignore case of searches
+set incsearch															" Dynamic highlighting
+set gdefault															" Default global search flag
 
-" Better command-line completion, fast terminal connections
-set wildmenu
-set ttyfast
+set wildmenu                              " Better command-line completion
+set lazyredraw                            " Faster rendering redrawing command options
+set ttyfast                               " Faster terminal connections
 
 " Don’t add empty newlines at the end of files
 set binary
@@ -37,37 +35,62 @@ if exists("&undodir")
 endif
 set backupskip=/tmp/*,/private/tmp/*
 
-" Skip intro message when starting Vim, show cursor position, don't reset cursor to start of line
+" Skip intro message when starting Vim
 set shortmess=atI
 set ruler
-set nostartofline
+set nostartofline                         " Show cursor position, don't reset cursor to start of line
+set cursorline                            " Highlight current cursor line
 
 " Show the current mode, filename in titlebar, show partial command as being typed
 set showmode
 set title
 set showcmd
+set showmatch															" Highlight matching parenthesis
 
 " Start scrolling three lines before the horizontal window border
 set scrolloff=3
 
 " Strip trailing white space (,ss)
-function! StripWhitespace()
+function! strip_white_spaces()
 	let save_cursor = getpos(".")
 	let old_query = getreg('/')
 	:%s/\s\+$//e
 	call setpos('.', save_cursor)
 	call setreg('/', old_query)
 endfunction
-noremap <leader>ss :call StripWhitespace()<CR>
+noremap <leader>ss :call strip_white_spaces()<CR>
 
 " Custom mappings
+
+" Quicker exit from insert mode
 imap jk <Esc>
 
-" Airline settings
+" Move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+
+" Move to beginning/end of line, $ & ^ are too far away
+nnoremap B ^
+nnoremap E $
+
+" Unbind defaults, force yourself to use B/E
+nnoremap $ <nop>
+nnoremap ^ <nop>
+
+" Space opens/closes folds
+nnoremap <space> za
+
+" Airline settings, theme: solarized
 set t_Co=256
 let g:airline_powerline_fonts=1
-let g:airline_theme='solarized'
+let g:airline_theme='solarized'           " Options: lucius, base16
 
 " Line number settings, git gutter settings
 set number
 highlight LineNr cterm=NONE ctermbg=NONE
+
+" Folding config
+set foldenable
+set foldlevelstart=10                     " Opens most folds by default
+set foldnestmax=4                         " 4 nested fold max
+set foldmethod=syntax
