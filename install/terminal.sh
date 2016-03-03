@@ -2,7 +2,7 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install -f
 
-sudo apt-get install git-core vim zsh tree silversearcher-ag
+sudo apt-get install git-core vim zsh tree silversearcher-ag autojump
 
 sudo curl -L http://install.ohmyz.sh > ~/install.sh
 sudo sh ~/install.sh
@@ -19,3 +19,5 @@ git clone git://github.com/airblade/vim-gitgutter.git ~/.vim/bundle/vim-gitgutte
 git clone http://github.com/sjl/gundo.vim.git ~/.vim/bundle/gundo
 git clone https://github.com/rking/ag.vim.git ~/.vim/bundle/ag
 git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp
+
+git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
