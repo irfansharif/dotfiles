@@ -42,6 +42,8 @@ set ruler
 set nostartofline                         " Show cursor position, don't reset cursor to start of line
 set cursorline                            " Highlight current cursor line
 
+" CDC = change to directory of current file, window specific
+command CDC lcd %:p:h
 set showmode                              " Show current mode
 set title                                 " Show filename in titlebar
 set showcmd                               " Show partial command as being typed
