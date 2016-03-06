@@ -23,6 +23,7 @@ Lightweight configurations optimised for 15" MacBook Pro running OSX El Capitan 
     <td>tmux</td>
     <td>Meslo LG M DZ Regular for Powerline 15pt</td>
   </tr>
+  <!--![](http://i.imgur.com/a6gcn9U.png)-->
 </table>
 
 # Installing
@@ -30,17 +31,17 @@ Lightweight configurations optimised for 15" MacBook Pro running OSX El Capitan 
 **TODO**: Set up automatic `linker.rb` script.
 
 # Screenshots
-
 ## ZSH
-Themese I use more often than others (look at `.zshrc`): `nebirhos`, `jbergantine` & `robbyrussell`.
+Themes I use more often than others (change `ZSH_THEME` in `zsh/zshrc`): `cypher`, `jbergantine`, `robbyrussell`, `nebirhos`, `kafeitu` & `philips`.
 
-![](http://imgur.com/Bo74h8i.png)
-![](http://imgur.com/0TszFu8.png)
-![](http://imgur.com/rVB9I1i.png)
+![](http://i.imgur.com/1Hc8FYg.png)
 
-Other themes (not pictured): `soliah`, `kafeitu`, `gallifrey`, `philips`, `cypher`, `dstufft`, `risto`, `half-life`, `norm`, `essembeh`, `fina` (**TODO**: personalise more), `murilasso`
+
+Other themes (not pictured): `soliah`, `gallifrey`, `dstufft`, `risto`, `half-life`, `norm`, `essembeh`, `fina`, `murilasso`.
+
+ (**TODO**: publish personalised variants)
 
 ## TMUX
 `tmux` multiplexer setup (also pictured resulting `.vimrc` config, window/session manager at the bottom):
 
-![](http://i.imgur.com/cjkm1Jb.png)
+![](http://i.imgur.com/lp2MysK.png)
