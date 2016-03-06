@@ -1,21 +1,23 @@
-set background=dark			                  " Dark background
-colorscheme solarized											" Other options: pablo
-syntax on																	" Syntax highlighting
-set autoindent														" Autoindent
-set expandtab															" Tabs are spaces
-filetype plugin indent on									" Load filetype-specific indent files
-let g:solarized_termtrans=1
-
 " Using pathogen for package management
 execute pathogen#infect()
 
+let g:solarized_termtrans=1
+let g:solarized_termcolors=16
+let g:solarized_visibility="low"
+colorscheme solarized                     " Other options: pablo
+set background=dark                       " Dark background
+syntax on                                 " Syntax highlighting
+
+set autoindent                            " Autoindent
+set expandtab                             " Tabs are spaces
+filetype plugin indent on                 " Load filetype-specific indent files
 set nocompatible                          " Make Vim more useful
 set clipboard=unnamed                     " use OS clipboard
 
+set list listchars=tab:»·,trail:·
 let mapleader=","                         " Change mapleader
 set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
-set modelines=1                           " Last comment line in each file reserved to file specific
-                                          " vim actions. See :help modelines
+set modelines=1                           " Last line (comment) reserved to file specific vim actions
 
 set ignorecase                            " Ignore case of searches
 set incsearch                             " Dynamic highlighting
@@ -26,34 +28,39 @@ set lazyredraw                            " Faster rendering redrawing command o
 set ttyfast                               " Faster terminal connections
 
 set noeol                                 " Don’t add empty newlines at the end of files
+set showcmd                               " Show partial command as being typed
+set ruler                                 " Show the line and column number of the cursor position,
 
-" Centralize backups, swapfiles and undo history, skip backups editing files in certain directories
-set backupdir=~/.vim/backups
-set directory=.,~/.vim/swaps
-if exists("&undodir")
-	set undodir=~/.vim/undo
+" Centralize backups, swapfiles and undo history. Create directories if not already present
+if !isdirectory(expand("~/.vim/backupdir/"))
+  silent !mkdir -p ~/.vim/backupdir
 endif
-set backupskip=/tmp/*,/private/tmp/*
+if !isdirectory(expand("~/.vim/swap/"))
+  silent !mkdir -p ~/.vim/swap
+endif
+if !isdirectory(expand("~/.vim/undo/"))
+  silent !mkdir -p ~/.vim/undo
+endif
+
+set backupdir^=~/.vim/backup/              " Directory to put backup files
+set directory^=~/.vim/swap/                " Directory to put swap files
+set undodir^=~/.vim/undo/                  " Directory to put undo files
+set backupskip=/tmp/*,/private/tmp/*       " Skip backups if editing in these directories
 set writebackup
 
-" Skip intro message when starting Vim
-set shortmess=atI
-set ruler
+set shortmess=atI                         " Skip intro message when starting Vim
 set nostartofline                         " Show cursor position, don't reset cursor to start of line
 set cursorline                            " Highlight current cursor line
 
-" CDC = change to directory of current file, window specific
-command CDC lcd %:p:h
+command CDC lcd %:p:h                     " Change to directory of current file, window specific (CDC)
 set showmode                              " Show current mode
 set title                                 " Show filename in titlebar
-set showcmd                               " Show partial command as being typed
 set showmatch                             " Highlight matching parenthesis
 
-" Start scrolling three lines before the horizontal window border
-set scrolloff=3
+set scrolloff=3                           " Start scrolling three lines before the horizontal window border
 
 " Functions {{{
-" Strip trailing white space (,ss)
+" Strip trailing white space (sws)
 function! StripWhiteSpace()
   let save_cursor = getpos(".")
   let old_query = getreg('/')
@@ -63,16 +70,36 @@ function! StripWhiteSpace()
 endfunction
 nnoremap sws :call StripWhiteSpace()<CR>
 
-" Toggle number view
+" Toggle number view (tn)
 function! ToggleNumber()
-  if(&relativenumber == 1)
-    set norelativenumber
-      set number
-    else
-      set relativenumber
-  endif
+  if(&number == 1)
+    set nonumber
+  else
+    set number
+ endif
 endfunc
 noremap tn :call ToggleNumber()<CR>
+
+" Toggle relative number view (tr)
+function! ToggleRelativeNumber()
+  if(&relativenumber == 1)
+    set norelativenumber
+    set number
+  else
+    set relativenumber
+ endif
+endfunc
+noremap tr :call ToggleRelativeNumber()<CR>
+
+" Toggle highlight search (ths)
+function! ToggleHighlightSearch()
+  if(&hlsearch == 1)
+    set nohls
+  else
+    set hls
+  endif
+endfunction
+nnoremap ths :call ToggleHighlightSearch()<CR>
 " }}}
 
 " Mappings {{{
@@ -119,6 +146,7 @@ let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 set t_Co=256
 let g:airline_powerline_fonts=1
 let g:airline_theme='solarized'           " Options: lucius, base16
+set laststatus=2                          " To show status bar on startup
 
 " Line number settings, git gutter settings
 set number
@@ -128,6 +156,6 @@ highlight LineNr cterm=NONE ctermbg=NONE
 set foldenable
 set foldlevelstart=10                     " Opens most folds by default
 set foldnestmax=4                         " 4 nested fold max
-set foldmethod=syntax
+set foldmethod=syntax                     " Folding based on file syntax
 
 " vim:foldmethod=marker:foldlevel=0
