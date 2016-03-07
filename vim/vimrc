@@ -1,5 +1,7 @@
 " Using pathogen for package management
 execute pathogen#infect()
+call pathogen#helptags()
+call pathogen#runtime_append_all_bundles()
 
 let g:solarized_termtrans=1
 let g:solarized_termcolors=16
@@ -52,7 +54,6 @@ set shortmess=atI                         " Skip intro message when starting Vim
 set nostartofline                         " Show cursor position, don't reset cursor to start of line
 set cursorline                            " Highlight current cursor line
 
-command CDC lcd %:p:h                     " Change to directory of current file, window specific (CDC)
 set showmode                              " Show current mode
 set title                                 " Show filename in titlebar
 set showmatch                             " Highlight matching parenthesis
@@ -100,6 +101,12 @@ function! ToggleHighlightSearch()
   endif
 endfunction
 nnoremap ths :call ToggleHighlightSearch()<CR>
+
+" Change to directory of current file, window specific (,cd)
+function! ChangeCurrentDirectory()
+  lcd %:p:h
+endfunction
+nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
 " }}}
 
 " Mappings {{{
@@ -134,6 +141,12 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>s :mksession<CR>
 " Silver searcher shortcut, ag.vim plugin
 nnoremap <leader>a :Ag
+
+" Force yourself to use hjkl
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
 " }}}
 
 " CtrlP settings
