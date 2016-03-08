@@ -6,7 +6,7 @@ DEFAULT_USER="Irfan"
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-# Preferred options: robbyrussell, soliah, kafeitu, gallifrey, nebirhos, 
+# Preferred options: robbyrussell, soliah, kafeitu, gallifrey, nebirhos,
 # philips, cypher, dstufft, risto, half-life, jbergantine, norm, essembeh
 # fina (should be personalized more), murilasso, nebirhos
 ZSH_THEME="robbyrussell"
@@ -67,6 +67,6 @@ ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=("expand-or-complete")
 tmux attach &> /dev/null
 
 if [[ ! $TERM =~ screen ]]; then
-  tmux 
+  tmux
   exit
 fi

@@ -20,5 +20,6 @@ git clone http://github.com/sjl/gundo.vim.git ~/.vim/bundle/gundo
 git clone https://github.com/rking/ag.vim.git ~/.vim/bundle/ag
 git clone https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/bundle/ctrlp
 git clone git://github.com/altercation/vim-colors-solarized.git ~/.vim/bundle/vim-color-solarized
+git clone git@github.com:terryma/vim-smooth-scroll.git ~/.vim/bundle/vim-smoll-scroll.git
 
 git clone git://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions

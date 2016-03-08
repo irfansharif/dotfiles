@@ -1,39 +1,64 @@
 " Using pathogen for package management
 execute pathogen#infect()
 call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
 
+" Theme Settings {{{
 let g:solarized_termtrans=1
 let g:solarized_termcolors=16
 let g:solarized_visibility="low"
 colorscheme solarized                     " Other options: pablo
 set background=dark                       " Dark background
 syntax on                                 " Syntax highlighting
+" }}}
 
+" General Settings {{{
+" Spacing settings
 set autoindent                            " Autoindent
 set expandtab                             " Tabs are spaces
 filetype plugin indent on                 " Load filetype-specific indent files
 set nocompatible                          " Make Vim more useful
 set clipboard=unnamed                     " use OS clipboard
-
 set list listchars=tab:»·,trail:·
-let mapleader=","                         " Change mapleader
 set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
-set modelines=1                           " Last line (comment) reserved to file specific vim actions
 
+" Search config
 set ignorecase                            " Ignore case of searches
 set incsearch                             " Dynamic highlighting
 set gdefault                              " Default global search flag
+highlight IncSearch term=standout cterm=standout,underline ctermfg=9
+highlight Search term=standout cterm=standout,bold ctermfg=9
+
+" Folding config
+set foldenable
+set foldlevelstart=10                     " Opens most folds by default
+set foldnestmax=4                         " 4 nested fold max
+set foldmethod=syntax                     " Folding based on file syntax
 
 set wildmenu                              " Better command-line completion
-set lazyredraw                            " Faster rendering redrawing command options
+set lazyredraw                            " Faster rendering command options
 set ttyfast                               " Faster terminal connections
-
-set noeol                                 " Don’t add empty newlines at the end of files
+set noeol                                 " Don’t add empty line at end of file
 set showcmd                               " Show partial command as being typed
-set ruler                                 " Show the line and column number of the cursor position,
+set ruler                                 " Show line & column number of cursor
+set shortmess=atI                         " Skip intro message when starting Vim
+set nostartofline                         " Don't reset cursor to start of line
+set cursorline                            " Highlight current cursor line
+set showmode                              " Show current mode
+set title                                 " Show filename in titlebar
+set showmatch                             " Highlight matching parenthesis
+set scrolloff=3                           " Scrol 3 lines before window border
+set number                                " Line number settings
+highlight LineNr cterm=NONE ctermbg=NONE
 
-" Centralize backups, swapfiles and undo history. Create directories if not already present
+" Close NERDTree when the last file closes
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+      \ b:NERDTree.isTabTree()) | q | endif
+set modelines=1                           " Last line (comment) reserved to file
+                                          " specific vim actions
+" }}}
+
+" Backup Settings {{{
+" Centralize backups, swapfiles & undo history. Make directories if not present
 if !isdirectory(expand("~/.vim/backupdir/"))
   silent !mkdir -p ~/.vim/backupdir
 endif
@@ -47,30 +72,25 @@ endif
 set backupdir^=~/.vim/backup/              " Directory to put backup files
 set directory^=~/.vim/swap/                " Directory to put swap files
 set undodir^=~/.vim/undo/                  " Directory to put undo files
-set backupskip=/tmp/*,/private/tmp/*       " Skip backups if editing in these directories
+set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
 set writebackup
+" }}}
 
-set shortmess=atI                         " Skip intro message when starting Vim
-set nostartofline                         " Show cursor position, don't reset cursor to start of line
-set cursorline                            " Highlight current cursor line
+" Plugin Settings {{{
+" CtrlP settings
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
-set showmode                              " Show current mode
-set title                                 " Show filename in titlebar
-set showmatch                             " Highlight matching parenthesis
+" Airline settings, theme: solarized
+set t_Co=256
+let g:airline_powerline_fonts=1
+let g:airline_theme='solarized'           " Options: lucius, base16
+set laststatus=2                          " To show status bar on startup
+" }}}
 
-set scrolloff=3                           " Start scrolling three lines before the horizontal window border
-
-" Functions {{{
-" Strip trailing white space (sws)
-function! StripWhiteSpace()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-nnoremap sws :call StripWhiteSpace()<CR>
-
+" Functions (& mappings) {{{
 " Toggle number view (tn)
 function! ToggleNumber()
   if(&number == 1)
@@ -100,16 +120,43 @@ function! ToggleHighlightSearch()
     set hls
   endif
 endfunction
+set hls
 nnoremap ths :call ToggleHighlightSearch()<CR>
+
+" Function for toggling over length highlighting (tol)
+function! ToggleOverLengthIndicator()
+    if g:over_length_hl_enabled
+        highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
+        let g:over_length_hl_enabled = 0
+    else
+        highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
+        let g:over_length_hl_enabled = 1
+    endif
+endfunction
+
+let g:over_length_hl_enabled = 1
+highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
+match OverLength /\%81v.\+/
+nnoremap tol :call ToggleOverLengthIndicator()<CR>
 
 " Change to directory of current file, window specific (,cd)
 function! ChangeCurrentDirectory()
   lcd %:p:h
 endfunction
 nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
+
+" Strip trailing white space (sws)
+function! StripWhiteSpace()
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
+endfunction
+nnoremap sws :call StripWhiteSpace()<CR>
 " }}}
 
-" Mappings {{{
+" Key Mappings {{{
 " Quicker exit from insert mode
 imap jk <Esc>
 
@@ -117,12 +164,8 @@ imap jk <Esc>
 nnoremap j gj
 nnoremap k gk
 
-" Move to beginning/end of line, $ & ^ are too far away
-nnoremap B ^
-nnoremap E $
-" Unbind defaults, force yourself to use B/E
-nnoremap $ <nop>
-nnoremap ^ <nop>
+" Change mapleader
+let mapleader=","
 
 " Space opens/closes folds
 nnoremap <space> za
@@ -147,28 +190,13 @@ map <up> <nop>
 map <down> <nop>
 map <left> <nop>
 map <right> <nop>
+
+" Smooth scrolling
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
+
+" Open NERDTree with ctrl+N
+map <C-n> :NERDTreeToggle %<CR>
 " }}}
-
-" CtrlP settings
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-
-" Airline settings, theme: solarized
-set t_Co=256
-let g:airline_powerline_fonts=1
-let g:airline_theme='solarized'           " Options: lucius, base16
-set laststatus=2                          " To show status bar on startup
-
-" Line number settings, git gutter settings
-set number
-highlight LineNr cterm=NONE ctermbg=NONE
-
-" Folding config
-set foldenable
-set foldlevelstart=10                     " Opens most folds by default
-set foldnestmax=4                         " 4 nested fold max
-set foldmethod=syntax                     " Folding based on file syntax
 
 " vim:foldmethod=marker:foldlevel=0
