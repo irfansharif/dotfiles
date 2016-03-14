@@ -1,3 +1,5 @@
+set nocompatible                          " Make Vim more useful
+
 " Using pathogen for package management
 execute pathogen#infect()
 call pathogen#helptags()
@@ -46,9 +48,12 @@ set cursorline                            " Highlight current cursor line
 set showmode                              " Show current mode
 set title                                 " Show filename in titlebar
 set showmatch                             " Highlight matching parenthesis
-set scrolloff=3                           " Scrol 3 lines before window border
+set scrolloff=3                           " Scroll 3 lines before window border
 set number                                " Line number settings
 highlight LineNr cterm=NONE ctermbg=NONE
+
+" Buffer Settings
+set hidden
 
 " Close NERDTree when the last file closes
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
@@ -80,14 +85,76 @@ set writebackup
 " CtrlP settings
 let g:ctrlp_match_window = 'bottom,order:ttb'
 let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
 let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+let g:ctrlp_working_path_mode = 0
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+  \}
+
+" Use nearest .git dir
+let g:ctrlp_working_path_mode = 'r'
 
 " Airline settings, theme: solarized
 set t_Co=256
 let g:airline_powerline_fonts=1
 let g:airline_theme='solarized'           " Options: lucius, base16
 set laststatus=2                          " To show status bar on startup
+" }}}
+
+" Key Mappings {{{
+" Quicker exit from insert mode
+imap jk <Esc>
+
+" Move vertically by visual line
+nnoremap j gj
+nnoremap k gk
+nnoremap J gj
+nnoremap K gk
+
+" Change mapleader
+let mapleader=","
+
+" Space opens/closes folds
+nnoremap <space> za
+" Super undo: ,u
+nnoremap <leader>u :GundoToggle<CR>
+" Highlight last inserted text
+nnoremap hi `[v`]
+
+" Edit .vimrc/.zshrc and load .vimrc bindings
+nnoremap <leader>ev :vsp $MYVIMRC<CR>
+nnoremap <leader>ez :vsp ~/.zshrc<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" Save session/current assortment of windows so they're there next time you
+" open Vim. Reopen saved session by running vim -S
+nnoremap <leader>s :mksession<CR>
+" Silver searcher shortcut, ag.vim plugin
+nnoremap <leader>a :Ag
+
+" Force yourself to use hjkl
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Smooth scrolling
+noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
+noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
+
+" Open NERDTree with ctrl+N
+map <C-n> :NERDTreeToggle %<CR>
+
+" Map Ctrl+V to paste in Insert mode
+imap <C-V> <C-R>*
+" Map Ctrl+C to copy in Visual mode
+vmap <C-C> "+y
+" Add paste shortcut
+nmap <C-V> "+p
+" Paste toggle to something easy
+set pastetoggle=tp
 " }}}
 
 " Functions (& mappings) {{{
@@ -139,9 +206,25 @@ highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
 match OverLength /\%81v.\+/
 nnoremap tol :call ToggleOverLengthIndicator()<CR>
 
+function! ToggleFold()
+  if(&foldlevel == 0)
+    set foldlevel=99
+  else
+    set foldlevel=0
+ endif
+endfunc
+noremap t<space> :call ToggleFold()<CR>
+
+
+" Change to directory of current file, window specific (,cd)
+function! LocallyChangeCurrentDirectory()
+  lcd %:p:h
+endfunction
+nnoremap <leader>lcd :call LocallyChangeCurrentDirectory()<CR>
+
 " Change to directory of current file, window specific (,cd)
 function! ChangeCurrentDirectory()
-  lcd %:p:h
+  cd %:p:h
 endfunction
 nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
 
@@ -154,49 +237,6 @@ function! StripWhiteSpace()
   call setreg('/', old_query)
 endfunction
 nnoremap sws :call StripWhiteSpace()<CR>
-" }}}
-
-" Key Mappings {{{
-" Quicker exit from insert mode
-imap jk <Esc>
-
-" Move vertically by visual line
-nnoremap j gj
-nnoremap k gk
-
-" Change mapleader
-let mapleader=","
-
-" Space opens/closes folds
-nnoremap <space> za
-" Super undo: ,u
-nnoremap <leader>u :GundoToggle<CR>
-" Highlight last inserted text
-nnoremap gV `[v`]
-
-" Edit .vimrc/.zshrc and load .vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" Save session/current assortment of windows so they're there next time you
-" open Vim. Reopen saved session by running vim -S
-nnoremap <leader>s :mksession<CR>
-" Silver searcher shortcut, ag.vim plugin
-nnoremap <leader>a :Ag
-
-" Force yourself to use hjkl
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
-
-" Smooth scrolling
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
-
-" Open NERDTree with ctrl+N
-map <C-n> :NERDTreeToggle %<CR>
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0

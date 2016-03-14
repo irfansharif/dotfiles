@@ -1,5 +1,5 @@
 # Shorcuts for faster file navigation
-aliase dl="cd ~/Downloads"
+alias dl="cd ~/Downloads"
 
 # List only directories
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
