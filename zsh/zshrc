@@ -9,7 +9,7 @@ DEFAULT_USER="Irfan"
 # Preferred options: robbyrussell, soliah, kafeitu, gallifrey, nebirhos,
 # philips, cypher, dstufft, risto, half-life, jbergantine, norm, essembeh
 # fina (should be personalized more), murilasso, nebirhos
-ZSH_THEME="robbyrussell"
+ZSH_THEME="jbergantine"
 
 # Uncomment the following line to use hyphen-insensitive completion. Case
 # sensitive completion must be off. _ and - will be interchangeable.
@@ -31,7 +31,6 @@ HIST_STAMPS="dd.mm.yyyy"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(zsh-autosuggestions git colored-man-pages history knife rails ruby rbenv)
-
 # User configuration
 
 export PATH="/Users/irfansharif/.rbenv/bin:/Users/irfansharif/.rbenv/shims:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin:~/torch/install/bin:/Users/irfansharif/github/install/bin/torch-activate:/Developer/NVIDIA/CUDA-7.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin"
@@ -57,12 +56,16 @@ fi
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 alias tmux="TERM=screen-256color-bce tmux"
+alias cdrd="$(git rev-parse --show-toplevel)"
+alias cl=clear
+
 export PATH="/usr/local/go/bin:$PATH"
 [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
 
 bindkey '`' autosuggest-accept
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=3  # Options: 1, 2, 3, 4
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=("expand-or-complete")
+unsetopt correct
 
 tmux attach &> /dev/null
 
