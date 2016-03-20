@@ -1,7 +1,7 @@
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get install -f
-sudo apt-get install git-core vim zsh tree tmux silversearcher-ag autojump
+sudo apt-get install git-core vim zsh tree tmux silversearcher-ag autojump ruby-dev pry
 
 sudo curl -L http://install.ohmyz.sh > ~/install.sh
 sudo sh ~/install.sh
