@@ -27,8 +27,9 @@ set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
 set ignorecase                            " Ignore case of searches
 set incsearch                             " Dynamic highlighting
 set gdefault                              " Default global search flag
-highlight IncSearch term=standout cterm=standout,underline ctermfg=9
-highlight Search term=standout cterm=standout,bold ctermfg=9
+set wrapscan                              " Wrap search around the file
+highlight IncSearch ctermfg=15 cterm=bold,underline term=standout
+highlight Search term=standout cterm=NONE ctermfg=15 ctermbg=NONE
 
 " Folding config
 set foldenable
@@ -187,7 +188,6 @@ function! ToggleHighlightSearch()
     set hls
   endif
 endfunction
-set hls
 nnoremap ths :call ToggleHighlightSearch()<CR>
 
 " Function for toggling over length highlighting (tol)
@@ -200,9 +200,8 @@ function! ToggleOverLengthIndicator()
         let g:over_length_hl_enabled = 1
     endif
 endfunction
-
-let g:over_length_hl_enabled = 1
-highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
+let g:over_length_hl_enabled = 0
+highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
 match OverLength /\%81v.\+/
 nnoremap tol :call ToggleOverLengthIndicator()<CR>
 
