@@ -53,6 +53,7 @@ set scrolloff=3                           " Scroll 3 lines before window border
 set number                                " Line number settings
 set mouse=a                               " Mouse mode
 highlight LineNr cterm=NONE ctermbg=NONE
+highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
 
 " Buffer Settings
 set hidden
@@ -108,6 +109,7 @@ set laststatus=2                          " To show status bar on startup
 " Key Mappings {{{
 " Quicker exit from insert mode
 imap jk <Esc>
+vmap jk <Esc>
 
 " Move vertically by visual line
 nnoremap j gj
@@ -135,12 +137,6 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>s :mksession<CR>
 " Silver searcher shortcut, ag.vim plugin
 nnoremap <leader>a :Ag
-
-" Force yourself to use hjkl
-map <up> <nop>
-map <down> <nop>
-map <left> <nop>
-map <right> <nop>
 
 " Smooth scrolling
 noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
