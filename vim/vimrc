@@ -7,7 +7,8 @@ call pathogen#helptags()
 " Theme Settings {{{
 let g:solarized_termtrans=1
 let g:solarized_termcolors=16
-let g:solarized_visibility="low"
+let g:solarized_contrast="normal"
+let g:solarized_visibility="normal"
 colorscheme solarized                     " Other options: pablo
 set background=dark                       " Dark background
 syntax on                                 " Syntax highlighting
@@ -43,7 +44,8 @@ set ttyfast                               " Faster terminal connections
 set noeol                                 " Don’t add empty line at end of file
 set showcmd                               " Show partial command as being typed
 set ruler                                 " Show line & column number of cursor
-set shortmess=atI                         " Skip intro message when starting Vim
+set shortmess=atIfilmnrxoOtT              " Skip intro message when starting Vim
+set spell                                 " Spell checking on
 set nostartofline                         " Don't reset cursor to start of line
 set cursorline                            " Highlight current cursor line
 set showmode                              " Show current mode
@@ -51,10 +53,32 @@ set title                                 " Show filename in titlebar
 set showmatch                             " Highlight matching parenthesis
 set scrolloff=3                           " Scroll 3 lines before window border
 set number                                " Line number settings
-set mouse=a                               " Mouse mode
+set mouse=a                               " Automatically enable mouse usage
+set mousehide                             " Hide the mouse cursor while typing
+set hidden                                " Buffer settings
+set iskeyword-=.                          " '.' is an end of word designator
+set iskeyword-=#                          " '#' is an end of word designator
+set iskeyword-=-                          " '-' is an end of word designator
+set backspace=indent,eol,start            " Backspace for dummies
+set linespace=0                           " No extra spaces between rows
+
+
+set nowrap                                " Do not wrap long lines
+set splitright                            " Puts new vsplit windows to the right of the current
+set splitbelow                            " Puts new split windows to the bottom of the current
+set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
+
+scriptencoding utf-8
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
 highlight LineNr cterm=NONE ctermbg=NONE
 highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
-"
+highlight clear SignColumn      " SignColumn should match background
+highlight Comment cterm=italic
+
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
 " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
 if &term == 'xterm-256color' || &term == 'screen-256color'
     let &t_SI = "\<Esc>[5 q"
@@ -66,8 +90,6 @@ if exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
 endif
 
-" Buffer Settings
-set hidden
 
 " Close NERDTree when the last file closes
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
@@ -115,12 +137,30 @@ set t_Co=256
 let g:airline_powerline_fonts=1
 let g:airline_theme='solarized'           " Options: lucius, base16
 set laststatus=2                          " To show status bar on startup
+
+" EasyMotion settings
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+" Move to line
+map <Leader>L <Plug>(easymotion-bd-jk)
+nmap <Leader>L <Plug>(easymotion-overwin-line)
+" Move to word
+map  <Leader>w <Plug>(easymotion-bd-w)
+nmap <Leader>w <Plug>(easymotion-overwin-w)
 " }}}
 
 " Key Mappings {{{
 " Quicker exit from insert mode
 imap jk <Esc>
-vmap jk <Esc>
+" vmap jk <Esc>
+
+" Allow using the repeat operator with a visual selection (!)
+vnoremap . :normal .<CR>
+
+" For when you forget to sudo.. Really Write the file.
+cmap w!! w !sudo tee % >/dev/null
+map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
 " Move vertically by visual line
 nnoremap j gj
@@ -164,6 +204,21 @@ vmap <C-C> "+y
 nmap <C-V> "+p
 " Paste toggle to something easy
 set pastetoggle=<leader>p
+
+" Stupid shift key fixes
+if has("user_commands")
+  command! -bang -nargs=* -complete=file E e<bang> <args>
+  command! -bang -nargs=* -complete=file W w<bang> <args>
+  command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+  command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+  command! -bang Wa wa<bang>
+  command! -bang WA wa<bang>
+  command! -bang Q q<bang>
+  command! -bang QA qa<bang>
+  command! -bang Qa qa<bang>
+endif
+
+cmap Tabe tabe
 " }}}
 
 " Functions (& mappings) {{{
