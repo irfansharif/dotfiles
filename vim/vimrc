@@ -5,300 +5,373 @@ execute pathogen#infect()
 call pathogen#helptags()
 
 " Theme Settings {{{
-let g:solarized_termtrans=1
-let g:solarized_termcolors=16
-let g:solarized_contrast="normal"
-let g:solarized_visibility="normal"
-colorscheme solarized                     " Other options: pablo
-set background=dark                       " Dark background
-syntax on                                 " Syntax highlighting
+  let g:solarized_termtrans=1
+  let g:solarized_termcolors=16
+  let g:solarized_contrast="normal"
+  let g:solarized_visibility="normal"
+  colorscheme solarized                     " Other options: pablo
+  set background=dark                       " Dark background
+  syntax on                                 " Syntax highlighting
 " }}}
 
 " General Settings {{{
-" Spacing settings
-set autoindent                            " Autoindent
-set expandtab                             " Tabs are spaces
-filetype plugin indent on                 " Load filetype-specific indent files
-set nocompatible                          " Make Vim more useful
-set clipboard=unnamed                     " use OS clipboard
-set list listchars=tab:»·,trail:·
-set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
+" Spacing settings {{{
+  set autoindent                            " Autoindent
+  set expandtab                             " Tabs are spaces
+  filetype plugin indent on                 " Load filetype-specific indent files
+  set nocompatible                          " Make Vim more useful
+  set clipboard=unnamed                     " use OS clipboard
+  " set list listchars=tab:»·,trail:·
+  set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
+" }}}
 
-" Search config
-set ignorecase                            " Ignore case of searches
-set incsearch                             " Dynamic highlighting
-set gdefault                              " Default global search flag
-set wrapscan                              " Wrap search around the file
-highlight IncSearch ctermfg=15 cterm=bold,underline term=standout
-highlight Search term=standout cterm=NONE ctermfg=15 ctermbg=NONE
+" Search config {{{
+  set ignorecase                            " Ignore case of searches
+  set incsearch                             " Dynamic highlighting
+  set gdefault                              " Default global search flag
+  set wrapscan                              " Wrap search around the file
+  highlight IncSearch ctermfg=15 cterm=bold,underline term=standout
+  highlight Search term=standout cterm=NONE ctermfg=15 ctermbg=NONE
+" }}}
 
-" Folding config
-set foldenable
-set foldlevelstart=10                     " Opens most folds by default
-set foldnestmax=4                         " 4 nested fold max
-set foldmethod=syntax                     " Folding based on file syntax
+" Folding config {{{
+  set foldenable
+  set foldlevelstart=10                     " Opens most folds by default
+  set foldnestmax=4                         " 4 nested fold max
+  set foldmethod=syntax                     " Folding based on file syntax
+" }}}
 
-set wildmenu                              " Better command-line completion
-set lazyredraw                            " Faster rendering command options
-set ttyfast                               " Faster terminal connections
-set noeol                                 " Don’t add empty line at end of file
-set showcmd                               " Show partial command as being typed
-set ruler                                 " Show line & column number of cursor
-set shortmess=atIfilmnrxoOtT              " Skip intro message when starting Vim
-set spell                                 " Spell checking on
-set nostartofline                         " Don't reset cursor to start of line
-set cursorline                            " Highlight current cursor line
-set showmode                              " Show current mode
-set title                                 " Show filename in titlebar
-set showmatch                             " Highlight matching parenthesis
-set scrolloff=3                           " Scroll 3 lines before window border
-set number                                " Line number settings
-set mouse=a                               " Automatically enable mouse usage
-set mousehide                             " Hide the mouse cursor while typing
-set hidden                                " Buffer settings
-set iskeyword-=.                          " '.' is an end of word designator
-set iskeyword-=#                          " '#' is an end of word designator
-set iskeyword-=-                          " '-' is an end of word designator
-set backspace=indent,eol,start            " Backspace for dummies
-set linespace=0                           " No extra spaces between rows
+" Vim general preferences {{{
+  set lazyredraw                            " Faster rendering command options
+  set ttyfast                               " Faster terminal connections
+  set noeol                                 " Don’t add empty line at end of file
+  set showcmd                               " Show partial command as being typed
+  set ruler                                 " Show line & column number of cursor
+  set shortmess=atIfilmnrxoOtT              " Skip intro message when starting Vim
+  set spell                                 " Spell checking on
+  set nostartofline                         " Don't reset cursor to start of line
+  set cursorline                            " Highlight current cursor line
+  set showmode                              " Show current mode
+  set title                                 " Show filename in titlebar
+  set showmatch                             " Highlight matching parenthesis
+  set scrolloff=3                           " Scroll 3 lines before window border
+  set number                                " Line number settings
+  set mouse=a                               " Automatically enable mouse usage
+  set mousehide                             " Hide the mouse cursor while typing
+  set hidden                                " Buffer settings
+  set iskeyword-=.                          " '.' is an end of word designator
+  set iskeyword-=#                          " '#' is an end of word designator
+  set iskeyword-=-                          " '-' is an end of word designator
+  set backspace=indent,eol,start            " Backspace for dummies
+  set linespace=0                           " No extra spaces between rows
+  set autowrite                             " Automatically save before :next, :make etc.
+  set autoread                              " Automatically reread changed files without asking me anything
+  set diffopt+=vertical                     " Vertical diff splits
+  set nowrap                                " Do not wrap long lines
+  set splitright                            " Puts new vsplit windows to the right of the current
+  set splitbelow                            " Puts new split windows to the bottom of the current
+  set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
+  set modelines=1                           " Last line (comment) reserved to file specific vim actions
+" }}}
 
+" Better command-line completion {{{
+  set wildmenu                                     " Better command-line completion
+  set wildmode=list:full
+  set wildignore+=.hg,.git,.svn                    " Version control
+  set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+  set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
+  set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+  set wildignore+=*.spl                            " compiled spelling word lists
+  set wildignore+=*.sw?                            " Vim swap files
+  set wildignore+=*.DS_Store                       " OSX bullshit
+  set wildignore+=*.orig                           " Merge resolution files
+" }}}
 
-set nowrap                                " Do not wrap long lines
-set splitright                            " Puts new vsplit windows to the right of the current
-set splitbelow                            " Puts new split windows to the bottom of the current
-set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
+" Miscellaneous {{{
+  scriptencoding utf-8
+  highlight LineNr cterm=NONE ctermbg=NONE
+  highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
+  highlight clear SignColumn      " SignColumn should match background
+  highlight Comment cterm=italic
 
-scriptencoding utf-8
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-highlight LineNr cterm=NONE ctermbg=NONE
-highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
-highlight clear SignColumn      " SignColumn should match background
-highlight Comment cterm=italic
+  " Instead of reverting the cursor to the last position in the buffer, we
+  " set it to the first line when editing a git commit message
+  au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
 
-" Instead of reverting the cursor to the last position in the buffer, we
-" set it to the first line when editing a git commit message
-au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+  " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
+  if &term == 'xterm-256color' || &term == 'screen-256color'
+      let &t_SI = "\<Esc>[5 q"
+      let &t_EI = "\<Esc>[1 q"
+  endif
 
-" Use a blinking upright bar cursor in Insert mode, a blinking block in normal
-if &term == 'xterm-256color' || &term == 'screen-256color'
-    let &t_SI = "\<Esc>[5 q"
-    let &t_EI = "\<Esc>[1 q"
-endif
+  if exists('$TMUX')
+      let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+      let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  endif
 
-if exists('$TMUX')
-    let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
-    let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-endif
+  " Never do this again :set paste <ctrl-v> :set no paste
+  let &t_SI .= "\<Esc>[?2004h"
+  let &t_EI .= "\<Esc>[?2004l"
 
-
-" Close NERDTree when the last file closes
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-      \ b:NERDTree.isTabTree()) | q | endif
-set modelines=1                           " Last line (comment) reserved to file
-                                          " specific vim actions
+  autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+  " Close NERDTree when the last file closes
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+        \ b:NERDTree.isTabTree()) | q | endif
+" }}}
 " }}}
 
 " Backup Settings {{{
 " Centralize backups, swapfiles & undo history. Make directories if not present
-if !isdirectory(expand("~/.vim/backupdir/"))
-  silent !mkdir -p ~/.vim/backupdir
-endif
-if !isdirectory(expand("~/.vim/swap/"))
-  silent !mkdir -p ~/.vim/swap
-endif
-if !isdirectory(expand("~/.vim/undo/"))
-  silent !mkdir -p ~/.vim/undo
-endif
+  if !isdirectory(expand("~/.vim/backupdir/"))
+    silent !mkdir -p ~/.vim/backupdir
+  endif
+  if !isdirectory(expand("~/.vim/swap/"))
+    silent !mkdir -p ~/.vim/swap
+  endif
+  if !isdirectory(expand("~/.vim/undo/"))
+    silent !mkdir -p ~/.vim/undo
+  endif
 
-set backupdir^=~/.vim/backup/              " Directory to put backup files
-set directory^=~/.vim/swap/                " Directory to put swap files
-set undodir^=~/.vim/undo/                  " Directory to put undo files
-set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
-set writebackup
+  set backupdir^=~/.vim/backup/              " Directory to put backup files
+  set directory^=~/.vim/swap/                " Directory to put swap files
+  set undodir^=~/.vim/undo/                  " Directory to put undo files
+  set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
+  set writebackup
 " }}}
 
 " Plugin Settings {{{
-" CtrlP settings
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-let g:ctrlp_working_path_mode = 0
-" Setup some default ignores
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-  \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
-  \}
+" CtrlP settings {{{
+  let g:ctrlp_cmd = 'CtrlPMRU'
+  let g:ctrlp_match_window = 'bottom,order:btt,min:10,max:10,results:10'
+  let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
+  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+  let g:ctrlp_working_path_mode = 0
+  let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+  let g:ctrlp_use_caching = 1
+  let g:ctrlp_clear_cache_on_exit = 0
+  let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
+  let g:ctrlp_max_height = 10		" maxiumum height of match window
+  let g:ctrlp_mruf_max=450 		" number of recently opened files
+  let g:ctrlp_max_files=0  		" do not limit the number of searchable files
+  " Setup some default ignores
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+    \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+    \}
+  " Use nearest .git dir
+  let g:ctrlp_working_path_mode = 'ra'
 
-" Use nearest .git dir
-let g:ctrlp_working_path_mode = 'r'
+  func! MyCtrlPTag()
+    let g:ctrlp_prompt_mappings = {
+          \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+          \ 'AcceptSelection("t")': ['<c-t>'],
+          \ }
+    CtrlPBufTag
+  endfunc
+  command! MyCtrlPTag call MyCtrlPTag()
 
-" Airline settings, theme: solarized
-set t_Co=256
-let g:airline_powerline_fonts=1
-let g:airline_theme='solarized'           " Options: lucius, base16
-set laststatus=2                          " To show status bar on startup
+  nmap <C-b> :CtrlPCurWD<cr>
+" }}}
 
-" EasyMotion settings
-" <Leader>f{char} to move to {char}
-map  <Leader>f <Plug>(easymotion-bd-f)
-nmap <Leader>f <Plug>(easymotion-overwin-f)
-" Move to line
-map <Leader>L <Plug>(easymotion-bd-jk)
-nmap <Leader>L <Plug>(easymotion-overwin-line)
-" Move to word
-map  <Leader>w <Plug>(easymotion-bd-w)
-nmap <Leader>w <Plug>(easymotion-overwin-w)
+" Vim-JSON settings {{{
+  let g:vim_json_syntax_conceal = 0
+" }}}
+
+" Ag.vim settings {{{
+  set runtimepath^=~/.vim/bundle/ag         " Ag.vim settings
+  let g:ag_working_path_mode="r"
+" }}}
+
+" Airline settings, theme: solarized {{{
+  set t_Co=256
+  let g:airline_powerline_fonts=1
+  let g:airline_theme='solarized'           " Options: lucius, base16
+  set laststatus=2                          " To show status bar on startup
+" }}}
+
+" Fugitive settings {{{
+  nnoremap <leader>ga :Git add %:p<CR><CR>
+  nnoremap <leader>gs :Gstatus<CR>
+  nnoremap <leader>gp :Gpush<CR>
+  nnoremap <leader>gb :Gblame<CR>
+" }}}
+
+" EasyMotion settings {{{
+  " <Leader>f{char} to move to {char}
+  map  <Leader>f <Plug>(easymotion-bd-f)
+  nmap <Leader>f <Plug>(easymotion-overwin-f)
+  " Move to line
+  map <Leader>L <Plug>(easymotion-bd-jk)
+  nmap <Leader>L <Plug>(easymotion-overwin-line)
+  " Move to word
+  map  <Leader>w <Plug>(easymotion-bd-w)
+  nmap <Leader>w <Plug>(easymotion-overwin-w)
+" }}}
 " }}}
 
 " Key Mappings {{{
 " Quicker exit from insert mode
-imap jk <Esc>
-" vmap jk <Esc>
+  imap jk <Esc>l
+  " vmap jk <Esc>
 
 " Allow using the repeat operator with a visual selection (!)
-vnoremap . :normal .<CR>
+  vnoremap . :normal .<CR>
 
 " For when you forget to sudo.. Really Write the file.
-cmap w!! w !sudo tee % >/dev/null
-map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+  cmap w!! w !sudo tee % >/dev/null
+  map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
 
 " Move vertically by visual line
-nnoremap j gj
-nnoremap k gk
-nnoremap J gj
-nnoremap K gk
+  nnoremap j gj
+  nnoremap k gk
+  nnoremap J gj
+  nnoremap K gk
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in.
+  nnoremap n nzzzv
+  nnoremap N Nzzz
+
+" Do not show stupid q: window
+  map q: :q
 
 " Change mapleader
-let mapleader=","
+  let mapleader=","
 
 " Space opens/closes folds
-nnoremap <space> za
+  nnoremap <space> za
 " Super undo: ,u
-nnoremap <leader>u :GundoToggle<CR>
+  nnoremap <leader>u :GundoToggle<CR>
 " Highlight last inserted text
-nnoremap <leader>hi `[v`]
+  nnoremap <leader>hi `[v`]
 
 " Edit .vimrc/.zshrc and load .vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
+  nnoremap <leader>ev :vsp $MYVIMRC<CR>
+  nnoremap <leader>ez :vsp ~/.zshrc<CR>
+  nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " Save session/current assortment of windows so they're there next time you
 " open Vim. Reopen saved session by running vim -S
-nnoremap <leader>s :mksession<CR>
+  nnoremap <leader>s :mksession<CR>
 " Silver searcher shortcut, ag.vim plugin
-nnoremap <leader>a :Ag
+  nnoremap <leader>a :Ag
 
 " Smooth scrolling
-noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
-noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
+  noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
+  noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
 
 " Open NERDTree with ctrl+N
-map <C-n> :NERDTreeToggle %<CR>
+  map <C-n> :NERDTreeToggle %<CR>
 
-" Map Ctrl+V to paste in Insert mode
-imap <C-V> <C-R>*
-" Map Ctrl+C to copy in Visual mode
-vmap <C-C> "+y
-" Add paste shortcut
-nmap <C-V> "+p
-" Paste toggle to something easy
-set pastetoggle=<leader>p
+" Paste shortcuts {{{
+    " Map Ctrl+V to paste, Ctrl+C to copy, paste shortcut with paste toggle
+    imap <C-V> <C-R>*
+    vmap <C-C> "+y
+    nmap <C-V> "+p
+    set pastetoggle=<leader>p
+" }}}
 
-" Stupid shift key fixes
-if has("user_commands")
-  command! -bang -nargs=* -complete=file E e<bang> <args>
-  command! -bang -nargs=* -complete=file W w<bang> <args>
-  command! -bang -nargs=* -complete=file Wq wq<bang> <args>
-  command! -bang -nargs=* -complete=file WQ wq<bang> <args>
-  command! -bang Wa wa<bang>
-  command! -bang WA wa<bang>
-  command! -bang Q q<bang>
-  command! -bang QA qa<bang>
-  command! -bang Qa qa<bang>
-endif
-
-cmap Tabe tabe
+" Shift key fixes {{{
+    if has("user_commands")
+      command! -bang -nargs=* -complete=file E e<bang> <args>
+      command! -bang -nargs=* -complete=file W w<bang> <args>
+      command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+      command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+      command! -bang Wa wa<bang>
+      command! -bang WA wa<bang>
+      command! -bang Q q<bang>
+      command! -bang QA qa<bang>
+      command! -bang Qa qa<bang>
+    endif
+" }}}
 " }}}
 
 " Functions (& mappings) {{{
-" Toggle number view (tn)
-function! ToggleNumber()
-  if(&number == 1)
-    set nonumber
-  else
-    set number
- endif
-endfunc
-noremap <leader>n :call ToggleNumber()<CR>
-
-" Toggle relative number view (tr)
-function! ToggleRelativeNumber()
-  if(&relativenumber == 1)
-    set norelativenumber
-    set number
-  else
-    set relativenumber
- endif
-endfunc
-noremap <leader>r :call ToggleRelativeNumber()<CR>
-
-" Toggle highlight search (ths)
-function! ToggleHighlightSearch()
-  if(&hlsearch == 1)
-    set nohls
-  else
-    set hls
-  endif
-endfunction
-nnoremap <leader>hs :call ToggleHighlightSearch()<CR>
-
-" Function for toggling over length highlighting (tol)
-function! ToggleOverLengthIndicator()
-    if g:over_length_hl_enabled
-        highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
-        let g:over_length_hl_enabled = 0
+" Toggle number view (tn) {{{
+  function! ToggleNumber()
+    if(&number == 1)
+      set nonumber
     else
-        highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
-        let g:over_length_hl_enabled = 1
+      set number
+   endif
+  endfunc
+  noremap <leader>n :call ToggleNumber()<CR>
+" }}}
+
+" Toggle relative number view (tr) {{{
+  function! ToggleRelativeNumber()
+    if(&relativenumber == 1)
+      set norelativenumber
+      set number
+    else
+      set relativenumber
+   endif
+  endfunc
+  noremap <leader>r :call ToggleRelativeNumber()<CR>
+" }}}
+
+" Toggle highlight search (ths) {{{
+  function! ToggleHighlightSearch()
+    if(&hlsearch == 1)
+      set nohls
+    else
+      set hls
     endif
-endfunction
-let g:over_length_hl_enabled = 0
-highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
-match OverLength /\%81v.\+/
-nnoremap <leader>ol :call ToggleOverLengthIndicator()<CR>
+  endfunction
+  nnoremap <leader>hs :call ToggleHighlightSearch()<CR>
+" }}}
 
-function! ToggleFold()
-  if(&foldlevel == 0)
-    set foldlevel=99
-  else
-    set foldlevel=0
- endif
-endfunc
-noremap <leader><space> :call ToggleFold()<CR>
+" Toggle over length highlighting (tol) {{{
+  function! ToggleOverLengthIndicator()
+      if g:over_length_hl_enabled
+          highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
+          let g:over_length_hl_enabled = 0
+      else
+          highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
+          let g:over_length_hl_enabled = 1
+      endif
+  endfunction
+  let g:over_length_hl_enabled = 0
+  highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
+  match OverLength /\%81v.\+/
+  nnoremap <leader>ol :call ToggleOverLengthIndicator()<CR>
+" }}}
 
+" Toggle fold (, ) {{{
+  function! ToggleFold()
+    if(&foldlevel == 0)
+      set foldlevel=99
+    else
+      set foldlevel=0
+   endif
+  endfunc
+  noremap <leader><space> :call ToggleFold()<CR>
+" }}}
 
-" Change to directory of current file, window specific (,cd)
-function! LocallyChangeCurrentDirectory()
-  lcd %:p:h
-endfunction
-nnoremap <leader>lcd :call LocallyChangeCurrentDirectory()<CR>
+" Change to directory of current file, window specific (,cd) {{{
+  function! LocallyChangeCurrentDirectory()
+    lcd %:p:h
+  endfunction
+  nnoremap <leader>lcd :call LocallyChangeCurrentDirectory()<CR>
+" }}}
 
-" Change to directory of current file, window specific (,cd)
-function! ChangeCurrentDirectory()
-  cd %:p:h
-endfunction
-nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
+" Change to directory of current file, window specific (,cd) {{{
+  function! ChangeCurrentDirectory()
+    cd %:p:h
+  endfunction
+  nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
+" }}}
 
-" Strip trailing white space (sws)
-function! StripWhiteSpace()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-nnoremap <leader>sw :call StripWhiteSpace()<CR>
+" Strip trailing white space (,sw) {{{
+  function! StripWhiteSpace()
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+    :%s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+  endfunction
+  nnoremap <leader>sw :call StripWhiteSpace()<CR>
+" }}}
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
