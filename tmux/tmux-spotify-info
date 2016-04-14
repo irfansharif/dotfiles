@@ -17,3 +17,5 @@ tell application "Spotify"
     end if
   end if
 end tell
+
+# vim:ft=applescript
