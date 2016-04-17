@@ -1,7 +1,9 @@
 [alias]
+  # Show verbose output about tags, branches or remotes
   tags = tag -l
   branches = branch -a
   remotes = remote -v
+  # Pretty log output
   log = log --decorate
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   d = difftool
@@ -14,6 +16,7 @@
   diffc = diff --check
 
 [color]
+  # Use colors in Git commands that are capable of colored output when outputting to the terminal
   ui = auto
 [color "branch"]
   current = yellow reverse
@@ -29,6 +32,7 @@
   changed = green
   untracked = cyan
 
+# Use `origin` as the default remote on the `master` branch in all cases
 [branch "master"]
   remote = origin
   merge = refs/heads/master
@@ -54,17 +58,18 @@
 	autocrlf = true
 [push]
   default = matching
-[commit]
-	gpgsign = true
+; [commit]
+; 	gpgsign = true
 [pull]
 	rebase = true
 [rerere]
 	enabled = true
 [merge]
 	conflictstyle = diff3
+
+# git bisect is pretty cool
+# vim:ft=gitconfig
 [status]
 	submodulesummary = 1
 [help]
 	autocorrect = 15
-
-# vim:ft=gitconfig
