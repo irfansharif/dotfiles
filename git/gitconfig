@@ -1,10 +1,12 @@
 [alias]
+  # Show verbose output about tags, branches or remotes
   tags = tag -l
   branches = branch -a
   remotes = remote -v
-  log = log --decorate
+  log = log --decorate --graph --relative-date --stat
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   d = difftool
+  uncommit = reset --soft HEAD~
   co = checkout
   unstage = reset HEAD --
   last = log -1 HEAD -p
@@ -12,8 +14,19 @@
   merged = branch --merged
   unmerged = branch --no-merged
   diffc = diff --check
+  diffs = diff --staged
+  assume   = update-index --assume-unchanged
+  unassume = update-index --no-assume-unchanged
+  assumed  = !git ls-files -v | grep ^h | cut -c 3-
+  snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+  snapshots = !git stash list --grep snapshot
+  ours = !git checkout --ours $@ && git add $@
+  theirs = !git checkout --theirs $@ && git add $@
+  addp = add --patch
+  filelog = log -u  
 
 [color]
+  # Use colors in Git commands that are capable of colored output when outputting to the terminal
   ui = auto
 [color "branch"]
   current = yellow reverse
@@ -29,6 +42,7 @@
   changed = green
   untracked = cyan
 
+# Use `origin` as the default remote on the `master` branch in all cases
 [branch "master"]
   remote = origin
   merge = refs/heads/master
@@ -46,12 +60,14 @@
 [diff]
   tool = vimdiff
 	submodule = log
+  mnemonicprefix = true
+	algorithm = patience
 [difftool]
   prompt = false
 [core]
   editor = vim
 	excludesfile = /Users/irfansharif/.gitignore_global
-	autocrlf = true
+	autocrlf = false
 [push]
   default = matching
 [commit]
