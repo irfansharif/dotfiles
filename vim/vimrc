@@ -37,12 +37,12 @@ call pathogen#helptags()
 " Folding config {{{
   set foldenable
   set foldlevelstart=10                     " Opens most folds by default
-  set foldnestmax=4                         " 4 nested fold max
+  set foldnestmax=3                         " 4 nested fold max
   set foldmethod=syntax                     " Folding based on file syntax
 " }}}
 
 " Vim general preferences {{{
-  set lazyredraw                            " Faster rendering command options
+  " set lazyredraw                            " Faster rendering command options
   set ttyfast                               " Faster terminal connections
   set noeol                                 " Don’t add empty line at end of file
   set showcmd                               " Show partial command as being typed
@@ -56,7 +56,7 @@ call pathogen#helptags()
   set showmatch                             " Highlight matching parenthesis
   set scrolloff=3                           " Scroll 3 lines before window border
   set number                                " Line number settings
-  set mouse=a                               " Automatically enable mouse usage
+  " set mouse=a                               " Automatically enable mouse usage
   set mousehide                             " Hide the mouse cursor while typing
   set hidden                                " Buffer settings
   set iskeyword-=.                          " '.' is an end of word designator
@@ -72,6 +72,7 @@ call pathogen#helptags()
   set splitbelow                            " Puts new split windows to the bottom of the current
   set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
   set modelines=1                           " Last line (comment) reserved to file specific vim actions
+  set linebreak                             " Wrap lines at convenient points
 " }}}
 
 " Better command-line completion {{{
@@ -93,7 +94,13 @@ call pathogen#helptags()
   highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
   highlight clear SignColumn      " SignColumn should match background
   highlight Comment cterm=italic
-
+  hi clear CursorLine
+  hi VertSplit cterm=NONE ctermbg=NONE
+  hi CursorLineNR cterm=bold ctermfg=226
+  augroup CLNRSet
+      autocmd! ColorScheme * hi CursorLineNR cterm=bold
+  augroup END
+  let g:tags_ripper = 1
   " Instead of reverting the cursor to the last position in the buffer, we
   " set it to the first line when editing a git commit message
   au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
@@ -132,11 +139,17 @@ call pathogen#helptags()
     silent !mkdir -p ~/.vim/undo
   endif
 
+  set undodir^=~/.vim/undo/                  " Directory to put undo files
   set backupdir^=~/.vim/backup/              " Directory to put backup files
   set directory^=~/.vim/swap/                " Directory to put swap files
-  set undodir^=~/.vim/undo/                  " Directory to put undo files
   set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
-  set writebackup
+
+  " set writebackup
+  set undofile
+
+  set nobackup                               " No backup files
+  set nowritebackup                          " Don't want a backup file while editing
+  set noswapfile                             " No swap files
 " }}}
 
 " Plugin Settings {{{
@@ -181,6 +194,7 @@ call pathogen#helptags()
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#sources#syntax#min_keyword_length = 3
+  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
   " Define dictionary.
   let g:neocomplete#sources#dictionary#dictionaries = {
         \ 'default' : '',
@@ -214,10 +228,10 @@ call pathogen#helptags()
   let g:neocomplete#enable_auto_select = 1
 
   " Shell like behavior(not recommended).
-  "set completeopt+=longest
-  "let g:neocomplete#enable_auto_select = 1
-  "let g:neocomplete#disable_auto_complete = 1
-  "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+  " set completeopt+=longest
+  " let g:neocomplete#enable_auto_select = 1
+  " let g:neocomplete#disable_auto_complete = 1
+  " inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
   " Enable omni completion.
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -233,6 +247,7 @@ call pathogen#helptags()
   let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 " }}}
+
 " Ag.vim settings {{{
   set runtimepath^=~/.vim/bundle/ag         " Ag.vim settings
   let g:ag_working_path_mode="r"
@@ -263,6 +278,31 @@ call pathogen#helptags()
   map  <Leader>w <Plug>(easymotion-bd-w)
   nmap <Leader>w <Plug>(easymotion-overwin-w)
 " }}}
+
+" Vim-Go settings {{{
+  let g:go_highlight_functions = 1
+  let g:go_highlight_methods = 1
+  let g:go_highlight_structs = 1
+  let g:go_highlight_interfaces = 1
+  let g:go_highlight_operators = 1
+  let g:go_highlight_build_constraints = 1
+  let g:go_fmt_command = "goimports"
+
+  au FileType go nmap <leader>gr <Plug>(go-run)
+  au FileType go nmap <leader>gb <Plug>(go-build)
+  au FileType go nmap <leader>gt <Plug>(go-test)
+  au FileType go nmap <leader>gc <Plug>(go-coverage)
+  au FileType go nmap <Leader>gds <Plug>(go-def-split)
+  au FileType go nmap <Leader>gd <Plug>(go-doc)
+  au FileType go nmap <Leader>gdb <Plug>(go-doc-browser)
+  au FileType go nmap <Leader>gi <Plug>(go-info)
+  " au FileType go nmap <Leader>gdv <Plug>(go-doc-vertical)
+  " au FileType go nmap <Leader>gdv <Plug>(go-def-vertical)
+  " au FileType go nmap <Leader>gs <Plug>(go-implements)
+
+  let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+  let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+" }}}
 " }}}
 
 " Key Mappings {{{
@@ -272,6 +312,10 @@ call pathogen#helptags()
 
 " Allow using the repeat operator with a visual selection (!)
   vnoremap . :normal .<CR>
+ 
+" Auto indent pasted text
+  nnoremap p p=`]<C-o>
+  nnoremap P P=`]<C-o>
 
 " For when you forget to sudo.. Really Write the file.
   cmap w!! w !sudo tee % >/dev/null
@@ -300,6 +344,7 @@ call pathogen#helptags()
   nnoremap <leader>u :GundoToggle<CR>
 " Highlight last inserted text
   nnoremap <leader>hi `[v`]
+  nnoremap <C-[> <C-o>
 
 " Edit .vimrc/.zshrc and load .vimrc bindings
   nnoremap <leader>ev :vsp $MYVIMRC<CR>
@@ -311,7 +356,7 @@ call pathogen#helptags()
   nnoremap <leader>s :mksession<CR>
 " Silver searcher shortcut, ag.vim plugin
   nnoremap <leader>a :Ag
-
+  "  nmap <S-t> :TagbarToggle<CR>
 " Smooth scrolling
   noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
   noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
@@ -324,7 +369,8 @@ call pathogen#helptags()
     imap <C-V> <C-R>*
     vmap <C-C> "+y
     nmap <C-V> "+p
-    set pastetoggle=<leader>p
+    " map <leader>p :set pastetoggle<CR>
+    " set pastetoggle=<leader>p
 " }}}
 
 " Shift key fixes {{{
@@ -343,7 +389,7 @@ call pathogen#helptags()
 " }}}
 
 " Functions (& mappings) {{{
-" Toggle number view (tn) {{{
+" Toggle number view (,n) {{{
   function! ToggleNumber()
     if(&number == 1)
       set nonumber
@@ -354,7 +400,7 @@ call pathogen#helptags()
   noremap <leader>n :call ToggleNumber()<CR>
 " }}}
 
-" Toggle relative number view (tr) {{{
+" Toggle relative number view (,r) {{{
   function! ToggleRelativeNumber()
     if(&relativenumber == 1)
       set norelativenumber
@@ -366,7 +412,7 @@ call pathogen#helptags()
   noremap <leader>r :call ToggleRelativeNumber()<CR>
 " }}}
 
-" Toggle highlight search (ths) {{{
+" Toggle highlight search (,hs) {{{
   function! ToggleHighlightSearch()
     if(&hlsearch == 1)
       set nohls
@@ -377,7 +423,7 @@ call pathogen#helptags()
   nnoremap <leader>hs :call ToggleHighlightSearch()<CR>
 " }}}
 
-" Toggle over length highlighting (tol) {{{
+" Toggle over length highlighting (,ol) {{{
   function! ToggleOverLengthIndicator()
       if g:over_length_hl_enabled
           highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
@@ -404,14 +450,14 @@ call pathogen#helptags()
   noremap <leader><space> :call ToggleFold()<CR>
 " }}}
 
-" Change to directory of current file, window specific (,cd) {{{
+" Change to directory of current file, window specific (,lcd) {{{
   function! LocallyChangeCurrentDirectory()
     lcd %:p:h
   endfunction
   nnoremap <leader>lcd :call LocallyChangeCurrentDirectory()<CR>
 " }}}
 
-" Change to directory of current file, window specific (,cd) {{{
+" Change to directory of current file (,cd) {{{
   function! ChangeCurrentDirectory()
     cd %:p:h
   endfunction
@@ -427,6 +473,25 @@ call pathogen#helptags()
     call setreg('/', old_query)
   endfunction
   nnoremap <leader>sw :call StripWhiteSpace()<CR>
+" }}}
+
+" Generating ctags (,rt){{{
+  function! ToggleRipperTags()
+    if g:tags_ripper
+      let g:tags_ripper=0
+    else
+      let g:tags_ripper=1
+    endif
+  endfunction
+
+  function! RunTags()
+    if g:tags_ripper
+      execute "!ripper-tags -R --exclude=vendor ."
+    else
+      execute "!/usr/local/bin/ctags -R ."
+    endif
+  endfunction
+  nnoremap <leader>rt :call RunTags()<CR>
 " }}}
 " }}}
 
