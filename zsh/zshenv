@@ -1,0 +1,10 @@
+export PATH="/Users/irfansharif/.rbenv/bin:/Users/irfansharif/.rbenv/shims:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin:~/torch/install/bin:/Users/irfansharif/github/install/bin/torch-activate:/Developer/NVIDIA/CUDA-7.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Users/irfansharif/.chefdk/gem/ruby/2.1.0/bin"
+export PATH="/usr/local/go/bin:$GOBIN:$PATH"
+
+
+# Add GHC 7.10.3 to the PATH, via https://ghcformacosx.github.io/
+export GHC_DOT_APP="/Applications/ghc-7.10.3.app"
+if [ -d "$GHC_DOT_APP" ]; then
+  export PATH="${HOME}/.local/bin:${HOME}/.cabal/bin:${GHC_DOT_APP}/Contents/bin:${PATH}"
+fi
+

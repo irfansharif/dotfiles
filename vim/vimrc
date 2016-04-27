@@ -100,11 +100,14 @@ call pathogen#helptags()
   augroup CLNRSet
       autocmd! ColorScheme * hi CursorLineNR cterm=bold
   augroup END
-  let g:tags_ripper = 1
   " Instead of reverting the cursor to the last position in the buffer, we
   " set it to the first line when editing a git commit message
   au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
-
+  autocmd FileType ruby let &l:tags = pathogen#legacyjoin(pathogen#uniq(
+        \ pathogen#split(&tags) +
+        \ map(split($GEM_PATH,':'),'v:val."/gems/*/tags"')))
+  let g:tags_ripper = 0
+  autocmd FileType ruby let g:tags_ripper = 1
   " Use a blinking upright bar cursor in Insert mode, a blinking block in normal
   if &term == 'xterm-256color' || &term == 'screen-256color'
       let &t_SI = "\<Esc>[5 q"
@@ -122,161 +125,221 @@ call pathogen#helptags()
 
   autocmd BufNewFile,BufReadPost *.md set filetype=markdown
   " Close NERDTree when the last file closes
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-        \ b:NERDTree.isTabTree()) | q | endif
-" }}}
-" }}}
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
+          \ b:NERDTree.isTabTree()) | q | endif
+  " }}}
+  " }}}
 
-" Backup Settings {{{
-" Centralize backups, swapfiles & undo history. Make directories if not present
-  if !isdirectory(expand("~/.vim/backupdir/"))
-    silent !mkdir -p ~/.vim/backupdir
-  endif
-  if !isdirectory(expand("~/.vim/swap/"))
-    silent !mkdir -p ~/.vim/swap
-  endif
-  if !isdirectory(expand("~/.vim/undo/"))
-    silent !mkdir -p ~/.vim/undo
-  endif
+  " Backup Settings {{{
+  " Centralize backups, swapfiles & undo history. Make directories if not present
+    if !isdirectory(expand("~/.vim/backupdir/"))
+      silent !mkdir -p ~/.vim/backupdir
+    endif
+    if !isdirectory(expand("~/.vim/swap/"))
+      silent !mkdir -p ~/.vim/swap
+    endif
+    if !isdirectory(expand("~/.vim/undo/"))
+      silent !mkdir -p ~/.vim/undo
+    endif
 
-  set undodir^=~/.vim/undo/                  " Directory to put undo files
-  set backupdir^=~/.vim/backup/              " Directory to put backup files
-  set directory^=~/.vim/swap/                " Directory to put swap files
-  set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
+    set undodir^=~/.vim/undo/                  " Directory to put undo files
+    set backupdir^=~/.vim/backup/              " Directory to put backup files
+    set directory^=~/.vim/swap/                " Directory to put swap files
+    set backupskip=/tmp/*,/private/tmp/*       " Skip backup if in these directories
 
-  " set writebackup
-  set undofile
+    " set writebackup
+    set undofile
 
-  set nobackup                               " No backup files
-  set nowritebackup                          " Don't want a backup file while editing
-  set noswapfile                             " No swap files
-" }}}
+    set nobackup                               " No backup files
+    set nowritebackup                          " Don't want a backup file while editing
+    set noswapfile                             " No swap files
+  " }}}
 
-" Plugin Settings {{{
-" CtrlP settings {{{
-  let g:ctrlp_cmd = 'CtrlPMRU'
-  let g:ctrlp_match_window = 'bottom,order:btt,min:10,max:10,results:10'
-  let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
-  let g:ctrlp_working_path_mode = 0
-  let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
-  let g:ctrlp_use_caching = 1
-  let g:ctrlp_clear_cache_on_exit = 0
-  let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
-  let g:ctrlp_max_height = 10		" maxiumum height of match window
-  let g:ctrlp_mruf_max=450 		" number of recently opened files
-  let g:ctrlp_max_files=0  		" do not limit the number of searchable files
-  " Setup some default ignores
-  let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-    \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
-    \}
-  " Use nearest .git dir
-  let g:ctrlp_working_path_mode = 'ra'
+  " Plugin Settings {{{
+  " CtrlP settings {{{
+    let g:ctrlp_cmd = 'CtrlPMRU'
+    let g:ctrlp_match_window = 'bottom,order:btt,min:10,max:10,results:10'
+    let g:ctrlp_switch_buffer = 'et'	" jump to a file if it's open already
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+    let g:ctrlp_working_path_mode = 0
+    let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+    let g:ctrlp_use_caching = 1
+    let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
+    let g:ctrlp_max_height = 10		" maxiumum height of match window
+    let g:ctrlp_mruf_max=450 		" number of recently opened files
+    let g:ctrlp_max_files=0  		" do not limit the number of searchable files
+    " Setup some default ignores
+    let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+      \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+      \}
+    " Use nearest .git dir
+    let g:ctrlp_working_path_mode = 'ra'
 
-  func! MyCtrlPTag()
-    let g:ctrlp_prompt_mappings = {
-          \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
-          \ 'AcceptSelection("t")': ['<c-t>'],
+    func! MyCtrlPTag()
+      let g:ctrlp_prompt_mappings = {
+            \ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+            \ 'AcceptSelection("t")': ['<c-t>'],
+            \ }
+      CtrlPBufTag
+    endfunc
+    command! MyCtrlPTag call MyCtrlPTag()
+
+    nmap <C-b> :CtrlPCurWD<cr>
+  " }}}
+
+  " Vim-JSON settings {{{
+    let g:vim_json_syntax_conceal = 0
+  " }}}
+
+  " Neocomplete settings {{{
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_smart_case = 1
+    let g:neocomplete#sources#syntax#min_keyword_length = 3
+    let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+    " Define dictionary.
+    let g:neocomplete#sources#dictionary#dictionaries = {
+          \ 'default' : '',
           \ }
-    CtrlPBufTag
-  endfunc
-  command! MyCtrlPTag call MyCtrlPTag()
 
-  nmap <C-b> :CtrlPCurWD<cr>
-" }}}
+    " Define keyword.
+    if !exists('g:neocomplete#keyword_patterns')
+      let g:neocomplete#keyword_patterns = {}
+    endif
+    let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-" Vim-JSON settings {{{
-  let g:vim_json_syntax_conceal = 0
-" }}}
+    " Plugin key-mappings.
+    inoremap <expr><C-g>     neocomplete#undo_completion()
+    inoremap <expr><C-l>     neocomplete#complete_common_string()
 
-" Neocomplete settings {{{
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-  let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-  " Define dictionary.
-  let g:neocomplete#sources#dictionary#dictionaries = {
-        \ 'default' : '',
-        \ }
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+      " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+      " For no inserting <CR> key.
+      return pumvisible() ? "\<C-y>" : "\<CR>"
+    endfunction
+    " <TAB>: completion.
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    " <BS>: close popup and delete backword char.
+    inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
-  " Define keyword.
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
-  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+    " AutoComplPop like behavior.
+    let g:neocomplete#enable_auto_select = 1
 
-  " Plugin key-mappings.
-  inoremap <expr><C-g>     neocomplete#undo_completion()
-  inoremap <expr><C-l>     neocomplete#complete_common_string()
+    " Shell like behavior(not recommended).
+    " set completeopt+=longest
+    " let g:neocomplete#enable_auto_select = 1
+    " let g:neocomplete#disable_auto_complete = 1
+    " inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
-  " Recommended key-mappings.
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function()
-    " return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
-    " For no inserting <CR> key.
-    return pumvisible() ? "\<C-y>" : "\<CR>"
-  endfunction
-  " <TAB>: completion.
-  inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+    " Enable omni completion.
+    autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+    autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+    autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-  " AutoComplPop like behavior.
-  let g:neocomplete#enable_auto_select = 1
+    " Enable heavy omni completion.
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+      let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+    let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+    let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  " }}}
 
-  " Shell like behavior(not recommended).
-  " set completeopt+=longest
-  " let g:neocomplete#enable_auto_select = 1
-  " let g:neocomplete#disable_auto_complete = 1
-  " inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+  " Ag.vim settings {{{
+    set runtimepath^=~/.vim/bundle/ag         " Ag.vim settings
+    let g:ag_working_path_mode="r"
+  " }}}
 
-  " Enable omni completion.
-  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+  " Airline settings, theme: solarized {{{
+    set t_Co=256
+    let g:airline_powerline_fonts=1
+    let g:airline_theme='solarized'           " Options: lucius, base16, solarized
+    set laststatus=2                          " To show status bar on startup
+  " }}}
 
-  " Enable heavy omni completion.
-  if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-  endif
-  let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-" }}}
+  " Fugitive settings {{{
+    nnoremap <leader>ga :Git add %:p<CR><CR>
+    nnoremap <leader>gs :Gstatus<CR>
+    nnoremap <leader>gp :Gpush<CR>
+    nnoremap <leader>gb :Gblame<CR>
+  " }}}
 
-" Ag.vim settings {{{
-  set runtimepath^=~/.vim/bundle/ag         " Ag.vim settings
-  let g:ag_working_path_mode="r"
-" }}}
+  " FastFold settings {{{
+    let g:fastfold_savehook = 1
+    let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+    let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+    let g:vimsyn_folding='af'
+    let g:tex_fold_enabled=1
+  " }}}
 
-" Airline settings, theme: solarized {{{
-  set t_Co=256
-  let g:airline_powerline_fonts=1
-  let g:airline_theme='solarized'           " Options: lucius, base16
-  set laststatus=2                          " To show status bar on startup
-" }}}
+  " EasyMotion settings {{{
+    " <Leader>f{char} to move to {char}
+    map  <Leader>f <Plug>(easymotion-bd-f)
+    nmap <Leader>f <Plug>(easymotion-overwin-f)
+    " Move to line
+    map <Leader>L <Plug>(easymotion-bd-jk)
+    nmap <Leader>L <Plug>(easymotion-overwin-line)
+    " Move to word
+    map  <Leader>w <Plug>(easymotion-bd-w)
+    nmap <Leader>w <Plug>(easymotion-overwin-w)
+  " }}}
 
-" Fugitive settings {{{
-  nnoremap <leader>ga :Git add %:p<CR><CR>
-  nnoremap <leader>gs :Gstatus<CR>
-  nnoremap <leader>gp :Gpush<CR>
-  nnoremap <leader>gb :Gblame<CR>
-" }}}
+  " VimWiki settings {{{
+    let g:vimwiki_table_mappings = 0
+  " }}}
 
-" EasyMotion settings {{{
-  " <Leader>f{char} to move to {char}
-  map  <Leader>f <Plug>(easymotion-bd-f)
-  nmap <Leader>f <Plug>(easymotion-overwin-f)
-  " Move to line
-  map <Leader>L <Plug>(easymotion-bd-jk)
-  nmap <Leader>L <Plug>(easymotion-overwin-line)
-  " Move to word
-  map  <Leader>w <Plug>(easymotion-bd-w)
-  nmap <Leader>w <Plug>(easymotion-overwin-w)
+  " Limelight settings {{{
+    " Color name (:help cterm-colors) or ANSI code
+    let g:limelight_conceal_ctermfg = 'gray'
+    let g:limelight_conceal_ctermfg = 240
+    let g:limelight_default_coefficient = 0.7
+
+    " Number of preceding/following paragraphs to include (default: 0)
+    let g:limelight_paragraph_span = 1
+
+    " Beginning/end of paragraph
+    "   When there's no empty line between the paragraphs
+    "   and each paragraph starts with indentation
+    let g:limelight_bop = '^\s'
+    let g:limelight_eop = '\ze\n^\s'
+
+    " Highlighting priority (default: 10)
+    "   Set it to -1 not to overrule hlsearch
+    let g:limelight_priority = -1
+
+    autocmd! User GoyoEnter Limelight
+    autocmd! User GoyoLeave Limelight!
+  " }}}
+
+  " Goyo settings {{{
+    function! s:goyo_enter()
+      silent !tmux set status off
+      silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+      set noshowmode
+      set noshowcmd
+      set scrolloff=999
+      Limelight
+      " ...
+    endfunction
+
+    function! s:goyo_leave()
+      silent !tmux set status on
+      silent !tmux list-panes -F '\#F' | grep -q Z && tmux resize-pane -Z
+      set showmode
+      set showcmd
+      set scrolloff=5
+      Limelight!
+      highlight LineNr cterm=NONE ctermbg=NONE
+      " ...
+    endfunction
+
+    autocmd! User GoyoEnter nested call <SID>goyo_enter()
+    autocmd! User GoyoLeave nested call <SID>goyo_leave()
 " }}}
 
 " Vim-Go settings {{{
@@ -344,19 +407,15 @@ call pathogen#helptags()
   nnoremap <leader>u :GundoToggle<CR>
 " Highlight last inserted text
   nnoremap <leader>hi `[v`]
-  nnoremap <C-[> <C-o>
 
 " Edit .vimrc/.zshrc and load .vimrc bindings
   nnoremap <leader>ev :vsp $MYVIMRC<CR>
   nnoremap <leader>ez :vsp ~/.zshrc<CR>
   nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" Save session/current assortment of windows so they're there next time you
-" open Vim. Reopen saved session by running vim -S
-  nnoremap <leader>s :mksession<CR>
 " Silver searcher shortcut, ag.vim plugin
   nnoremap <leader>a :Ag
-  "  nmap <S-t> :TagbarToggle<CR>
+  nmap <S-t> :TagbarToggle<CR>
 " Smooth scrolling
   noremap <silent> <c-u> :call smooth_scroll#up(&scroll, 5, 2)<CR>
   noremap <silent> <c-d> :call smooth_scroll#down(&scroll, 5, 2)<CR>
@@ -486,7 +545,7 @@ call pathogen#helptags()
 
   function! RunTags()
     if g:tags_ripper
-      execute "!ripper-tags -R --exclude=vendor ."
+      execute "!ripper-tags -R --exclude=vendor . `bundle show --paths`"
     else
       execute "!/usr/local/bin/ctags -R ."
     endif

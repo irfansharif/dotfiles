@@ -1,8 +1,10 @@
 [alias]
-  # Show verbose output about tags, branches or remotes
+  l = log --pretty=oneline -n 20 --graph --abbrev-commit
   tags = tag -l
   branches = branch -a
   remotes = remote -v
+  amend = commit --amend --reuse-message=HEAD
+  contributors = shortlog --summary --numbered
   log = log --decorate --graph --relative-date --stat
   hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
   d = difftool
@@ -24,9 +26,9 @@
   theirs = !git checkout --theirs $@ && git add $@
   addp = add --patch
   filelog = log -u  
+	ctags = !.git/hooks/ctags
 
 [color]
-  # Use colors in Git commands that are capable of colored output when outputting to the terminal
   ui = auto
 [color "branch"]
   current = yellow reverse
@@ -47,6 +49,8 @@
   remote = origin
   merge = refs/heads/master
 
+[apply]
+  whitespace = fix
 [user]
   name = irfan sharif
   email = irfanmahmoudsharif@gmail.com
@@ -59,6 +63,7 @@
   smudge = git-lfs smudge %f
 [diff]
   tool = vimdiff
+  renames = copies
 	submodule = log
   mnemonicprefix = true
 	algorithm = patience
@@ -66,6 +71,7 @@
   prompt = false
 [core]
   editor = vim
+  whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 	excludesfile = /Users/irfansharif/.gitignore_global
 	autocrlf = false
 [push]
@@ -82,5 +88,7 @@
 	submodulesummary = 1
 [help]
 	autocorrect = 15
+[init]
+  templatedir = /Users/irfansharif/code/github/dotfiles/git/git_template
 
 # vim:ft=gitconfig
