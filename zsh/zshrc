@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/irfansharif/.oh-my-zsh
+export ZSH=/home/irfansharif/.oh-my-zsh
 DEFAULT_USER="Irfan"
 
 # Set name of the theme to load.
@@ -45,8 +45,9 @@ else
 fi
 
 # Autojump config for OSX
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
-# Zsh autosuggestions binding
+# [[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+# Autojump config for Ubuntu
+source /usr/share/autojump/autojump.sh
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -55,18 +56,23 @@ fi
 # Example aliases
 alias zshconfig="vim ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
-alias tmux="TERM=screen-256color-bce tmux"
 alias cdrd="cd $(git rev-parse --show-toplevel)"
-alias cl=clear
 
-export PATH="/usr/local/go/bin:$PATH"
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
+vman() {
+  vim -c "set nonumber | SuperMan $*"
 
-bindkey '`' autosuggest-accept
+  if [ "$?" != "0" ]; then
+    echo "No manual entry for $*"
+  fi
+}
+compdef vman="man"
+
+export GOPATH=$HOME/code
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+bindkey '``' autosuggest-accept
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg=3  # Options: 1, 2, 3, 4
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=("expand-or-complete")
 unsetopt correct
 
-source /Users/irfansharif/code/github/zaw/zaw.zsh
-
-ruby ~/code/github/dotfiles/tmux/start-tmux.rb
+ruby ~/code/src/github.com/dotfiles/tmux/start-tmux.rb

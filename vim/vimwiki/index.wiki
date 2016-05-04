@@ -1,6 +1,0 @@
-= Personal Wiki=
-  * [[TODO]] -- TODO list
-  * [[Projects]] -- Projects wiki, ideas on projects to work on, feature ideas
-  * [[Reading]] -- Currently reading, previously read, insights
-  * [[Notes]] -- Notes for school courses
-  * [[Miscellaneous]] -- Miscellaneous

@@ -73,6 +73,7 @@ call pathogen#helptags()
   set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
   set modelines=1                           " Last line (comment) reserved to file specific vim actions
   set linebreak                             " Wrap lines at convenient points
+  autocmd VimResized * wincmd =
 " }}}
 
 " Better command-line completion {{{
