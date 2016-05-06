@@ -294,6 +294,50 @@ call pathogen#helptags()
     let g:vimwiki_table_mappings = 0
   " }}}
 
+  " Startify settings {{{
+    let g:startify_list_order = [
+          \ ['   LRU:'],
+          \ 'files',
+          \ ['   LRU within this dir:'],
+          \ 'dir',
+          \ ['   Sessions:'],
+          \ 'sessions',
+          \ ['   Bookmarks:'],
+          \ 'bookmarks',
+          \ ]
+    let g:startify_bookmarks = [ {'vi': '~/.vimrc'}, {'zs': '~/.zshrc' }, {'tm': '~/.tmux.conf'} ]
+    let g:startify_files_number = 5
+    let g:startify_update_oldfiles = 1
+    let g:startify_change_to_dir = 1
+    let g:startify_change_to_vcs_root = 1
+
+    let g:startify_skiplist = [
+          \ 'COMMIT_EDITMSG',
+          \ '^/tmp',
+          \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
+          \ 'bundle/.*/doc',
+          \ ]
+
+    let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
+    let g:ascii = [
+          \ '        __',
+          \ '.--.--.|__|.--------.',
+          \ '|  |  ||  ||        |',
+          \ ' \___/ |__||__|__|__|',
+          \ ''
+          \]
+    let g:startify_custom_header =
+          \ map(g:ascii + startify#fortune#boxed(), '"   ".v:val')
+
+    highlight StartifyBracket ctermfg=240
+    highlight StartifyFooter  ctermfg=240
+    highlight StartifyHeader  ctermfg=114
+    highlight StartifyNumber  ctermfg=215
+    highlight StartifyPath    ctermfg=245
+    highlight StartifySlash   ctermfg=240
+    highlight StartifySpecial ctermfg=240
+  " }}}
+
   " Limelight settings {{{
     " Color name (:help cterm-colors) or ANSI code
     let g:limelight_conceal_ctermfg = 'gray'
