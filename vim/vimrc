@@ -20,7 +20,7 @@ call pathogen#helptags()
   set expandtab                             " Tabs are spaces
   filetype plugin indent on                 " Load filetype-specific indent files
   set nocompatible                          " Make Vim more useful
-  set clipboard=unnamed                     " use OS clipboard
+  set clipboard=unnamedplus                 " use OS clipboard
   " set list listchars=tab:»·,trail:·
   set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
 " }}}
@@ -73,6 +73,7 @@ call pathogen#helptags()
   set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
   set modelines=1                           " Last line (comment) reserved to file specific vim actions
   set linebreak                             " Wrap lines at convenient points
+  set shell=/bin/bash
   autocmd VimResized * wincmd =
 " }}}
 
@@ -259,6 +260,7 @@ call pathogen#helptags()
   " Airline settings, theme: solarized {{{
     set t_Co=256
     let g:airline_powerline_fonts=1
+    let g:airline#extensions#tabline#enabled = 1
     let g:airline_theme='solarized'           " Options: lucius, base16, solarized
     set laststatus=2                          " To show status bar on startup
   " }}}
@@ -295,6 +297,7 @@ call pathogen#helptags()
   " }}}
 
   " Startify settings {{{
+    let g:startify_disable_at_vimenter = 1
     let g:startify_list_order = [
           \ ['   LRU:'],
           \ 'files',
@@ -439,6 +442,10 @@ call pathogen#helptags()
 " search will center on the line it's found in.
   nnoremap n nzzzv
   nnoremap N Nzzz
+
+" Easier buffer navigation
+  nnoremap <Tab> :bnext<CR>
+  nnoremap <S-Tab> :bprevious<CR>
 
 " Do not show stupid q: window
   map q: :q
@@ -592,7 +599,7 @@ call pathogen#helptags()
     if g:tags_ripper
       execute "!ripper-tags -R --exclude=vendor . `bundle show --paths`"
     else
-      execute "!/usr/local/bin/ctags -R ."
+      execute "!/usr/bin/ctags -R ."
     endif
   endfunction
   nnoremap <leader>rt :call RunTags()<CR>
