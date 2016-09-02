@@ -25,5 +25,5 @@ def generate_name
           varahamihira visvesvaraya volhard wescoff williams wilson wing wozniak
           wright yalow yonath)
 
-  "#{left.sample}_#{right.sample}"
+  "#{left.sample}-#{right.sample}"
 end

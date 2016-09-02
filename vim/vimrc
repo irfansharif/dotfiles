@@ -20,9 +20,11 @@ call pathogen#helptags()
   set expandtab                             " Tabs are spaces
   filetype plugin indent on                 " Load filetype-specific indent files
   set nocompatible                          " Make Vim more useful
-  set clipboard=unnamedplus                 " use OS clipboard
+  set clipboard=unnamed                     " use OS clipboard
   " set list listchars=tab:»·,trail:·
   set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
+  autocmd Filetype go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 " }}}
 
 " Search config {{{
@@ -407,9 +409,8 @@ call pathogen#helptags()
   au FileType go nmap <Leader>gd <Plug>(go-doc)
   au FileType go nmap <Leader>gdb <Plug>(go-doc-browser)
   au FileType go nmap <Leader>gi <Plug>(go-info)
-  " au FileType go nmap <Leader>gdv <Plug>(go-doc-vertical)
-  " au FileType go nmap <Leader>gdv <Plug>(go-def-vertical)
-  " au FileType go nmap <Leader>gs <Plug>(go-implements)
+  au FileType go nmap <Leader>gdv <Plug>(go-def-vertical)
+  au FileType go nmap <Leader>gs <Plug>(go-implements)
 
   let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
   let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
@@ -423,7 +424,7 @@ call pathogen#helptags()
 
 " Allow using the repeat operator with a visual selection (!)
   vnoremap . :normal .<CR>
- 
+
 " Auto indent pasted text
   nnoremap p p=`]<C-o>
   nnoremap P P=`]<C-o>
