@@ -1,4 +1,5 @@
 ag
+auto-pairs
 ctrlp.vim
 fonts
 go-explorer
@@ -7,9 +8,11 @@ gundo
 limelight.vim
 neocomplete
 nerdtree
+sessionman.vim
 syntastic
 tagbar
 undotree
+vim-abolish
 vim-airline
 vim-airline-themes
 vim-bundler
@@ -22,7 +25,9 @@ vim-fugitive
 vim-gitgutter
 vim-go
 vim-json
+vim-multiple-cursors
 vim-nerdtree-tabs
+vim-preview
 vim-rails
 vim-rbenv
 vim-repeat

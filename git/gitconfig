@@ -54,7 +54,6 @@
 [user]
   name = irfan sharif
   email = irfanmahmoudsharif@gmail.com
-	signingkey = 8536707E
 [credential]
   helper = osxkeychain
 [filter "lfs"]
@@ -72,7 +71,7 @@
 [core]
   editor = vim
   whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-	excludesfile = /Users/irfansharif/.gitignore_global
+	excludesfile = /Users/irfansharif/Software/src/github.com/irfansharif/dotfiles/git/gitignore_global
 	autocrlf = false
 [push]
   default = matching
@@ -89,6 +88,6 @@
 [help]
 	autocorrect = 15
 [init]
-  templatedir = /Users/irfansharif/code/github/dotfiles/git/git_template
+  templatedir = /Users/irfansharif/Software/src/github.com/irfansharif/dotfiles/git/git_template
 
 # vim:ft=gitconfig

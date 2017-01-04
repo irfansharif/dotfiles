@@ -607,4 +607,6 @@ call pathogen#helptags()
 " }}}
 " }}}
 
+set runtimepath^=~/.vim/bundle/ag
+
 " vim:foldmethod=marker:foldlevel=0

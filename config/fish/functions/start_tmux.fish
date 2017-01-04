@@ -1,4 +1,4 @@
 function start_tmux
-  ruby $GITHUBPATH/dotfiles/tmux/start-tmux.rb
+  ruby $GITHUBPATH/irfansharif/dotfiles/tmux/start-tmux.rb
 end
 

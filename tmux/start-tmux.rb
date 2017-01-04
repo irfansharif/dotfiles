@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+trap("SIGINT") { 
+  exit
+}
 
 exit if ENV["TMUX"]
 
@@ -30,7 +33,6 @@ choice = Readline.readline(
 
 choice = available_options[choice.to_i <= available_options.length ? choice.to_i : 0] if choice =~ /^[-+]?[0-9]*$/
 if choice == "no-session"
-  # exec system 'zsh --login'
   exit
 elsif choice != available_options[0] and available_options.include?(choice)
   `tmux attach-session -t #{choice}`
