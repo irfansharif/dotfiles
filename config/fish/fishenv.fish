@@ -6,5 +6,4 @@ set --export PATH $PATH /usr/local/bin /usr/bin /bin
 set --export PATH $PATH $GOPATH/bin
 set --export GITHUBPATH $HOME/Software/src/github.com
 
-set -U EDITOR vim
 bind \cc 'commandline ""'

@@ -19,6 +19,10 @@ call plug#begin('~/.vim/plugged')
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
+  Plug 'majutsushi/tagbar'
+  " Use 'itchyny/lightline.vim' instead
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
   Plug 'vim-syntastic/syntastic'
   Plug 'Konfekt/FastFold'
   Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
@@ -163,8 +167,8 @@ call plug#end()
     set t_Co=256
     let g:airline_powerline_fonts = 1
     let g:airline#extensions#tabline#enabled = 1
-    let g:airline_theme = 'solarized'         " Or lucius, base16
-    set laststatus=2                          " To show status bar on startup
+    let g:airline_theme = 'lucius'         " Lucius, Base16, or Solarized
+    set laststatus=2                       " To show status bar on startup
   " }}}
 
   " EasyMotion {{{
@@ -269,6 +273,9 @@ call plug#end()
 
 " Open NERDTree with ctrl+N
   map <C-n> :NERDTreeToggle %<CR>
+
+" Open Tagbar with Shift+T
+  nmap <S-t> :TagbarToggle<CR>
 
   " Map Ctrl+V to paste, Ctrl+C to copy, paste shortcut with paste toggle
   imap <C-V> <C-R>*
