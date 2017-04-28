@@ -3,5 +3,9 @@
 # piped into `less` with options to preserve color and line numbers
 # unless small enough for one screen.
 function tre
-  tree -aC -I '.git|node_modules' --dirsfirst "$argv" | less -FRX
+  if count $argv > /dev/null
+    tree -aC -I '.git|node_modules' --dirsfirst "$argv" | less -FRX
+  else
+    tree -aC -I '.git|node_modules' --dirsfirst . | less -FRX
+  end
 end
