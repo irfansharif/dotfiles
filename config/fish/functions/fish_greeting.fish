@@ -1,4 +1,4 @@
 function fish_greeting
-  start-tmux
+  stmux
 end
 
