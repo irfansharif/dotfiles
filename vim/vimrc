@@ -372,4 +372,7 @@ call plug#end()
   " }}}
 " }}}
 
+" Source computer-specific customizations
+source ~/.vimrc.custom
+
 " vim:foldmethod=marker:foldlevel=0

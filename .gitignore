@@ -2,3 +2,4 @@ config/fish/fish_history
 config/fish/fishd.*
 vim/vim/plugged
 vim/vim/undo
+setup.sh
