@@ -3,34 +3,37 @@ set nocompatible                          " Make Vim more useful
 " Plugins {{{
 " Use vim-plug to manage dependencies, stored to ~/.vim/plugged
 call plug#begin('~/.vim/plugged')
-  Plug 'jremmen/vim-ripgrep'
+  Plug 'Konfekt/FastFold'
   Plug 'airblade/vim-gitgutter'
   Plug 'altercation/vim-colors-solarized'
+  Plug 'cespare/vim-toml', { 'for': 'toml' }
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dag/vim-fish'
   Plug 'easymotion/vim-easymotion'
+  Plug 'elzr/vim-json', { 'for': 'json' }
+  Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
   Plug 'flazz/vim-colorschemes'
+  Plug 'jremmen/vim-ripgrep'
   Plug 'junegunn/vim-easy-align'
+  Plug 'majutsushi/tagbar'
   Plug 'mbbill/undotree'
+  Plug 'racer-rust/vim-racer'
+  Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
+  Plug 'rust-lang/rust.vim'
+  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-vinegar.git'
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
-  Plug 'majutsushi/tagbar'
-  " Use 'itchyny/lightline.vim' instead
+  Plug 'Valloric/YouCompleteMe'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-syntastic/syntastic'
-  Plug 'Konfekt/FastFold'
-  Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
-  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-  Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-  Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
-  Plug 'cespare/vim-toml', { 'for': 'toml' }
+  Plug 'vim-syntastic/syntastic'
 call plug#end()
 " }}}
 
@@ -122,10 +125,10 @@ call plug#end()
   set autowrite                             " Automatically save before :next
   set autoread                              " Automatically reread changed files
   set diffopt+=vertical                     " Vertical diff splits
-  set nowrap                                " Do not wrap long lines
+  set wrap                                  " Wrap long lines
   set splitright                            " New vsplit windows to the right
   set splitbelow                            " New split windows to the bottom
-  set comments=sl:/*,mb:*,elx:*/            " auto format comment blocks
+  set comments=sl:/*,mb:*,elx:*/            " Auto format comment blocks
   set modelines=1                           " Last line reserved for vim actions
   set linebreak                             " Wrap lines at convenient points
   set shell=/usr/local/bin/fish
@@ -159,6 +162,14 @@ call plug#end()
   " }}}
 
 " Plugins {{{
+  " Rust.vim {{{
+    let g:racer_experimental_completer = 1
+    au FileType rust nmap <leader>gd <Plug>(rust-def)
+    au FileType rust nmap <leader>gdc <Plug>(rust-doc)
+    let g:ycm_rust_src_path = '/Users/irfansharif/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
+    let g:rustfmt_autosave = 1
+  " }}}
+
   " Vim-JSON {{{
     let g:vim_json_syntax_conceal = 0
   " }}}
@@ -177,7 +188,7 @@ call plug#end()
     nmap <Leader>w <Plug>(easymotion-overwin-w)
   " }}}
 
-  " Vim-Go {{{
+  " VimGo {{{
     let g:go_highlight_functions = 1
     let g:go_highlight_methods = 1
     let g:go_highlight_structs = 1
