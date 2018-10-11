@@ -5,34 +5,24 @@ set nocompatible                          " Make Vim more useful
 call plug#begin('~/.vim/plugged')
   Plug 'Konfekt/FastFold'
   Plug 'airblade/vim-gitgutter'
-  Plug 'altercation/vim-colors-solarized'
-  Plug 'cespare/vim-toml', { 'for': 'toml' }
   Plug 'christoomey/vim-tmux-navigator'
   Plug 'dag/vim-fish'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'elzr/vim-json', { 'for': 'json' }
   Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
   Plug 'flazz/vim-colorschemes'
-  Plug 'jremmen/vim-ripgrep'
-  Plug 'junegunn/vim-easy-align'
+  Plug 'google/vim-searchindex'
   Plug 'majutsushi/tagbar'
   Plug 'mbbill/undotree'
   Plug 'racer-rust/vim-racer'
   Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
-  Plug 'rust-lang/rust.vim'
-  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-  Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-endwise'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-vinegar.git'
+  Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
-  Plug 'Valloric/YouCompleteMe'
+  Plug 'tpope/vim-vinegar'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
   Plug 'vim-syntastic/syntastic'
 call plug#end()
 " }}}
@@ -54,7 +44,7 @@ call plug#end()
   set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
 
   " Language specific tabwidth
-  autocmd Filetype go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd Filetype go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=80
   autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4
 " }}}
 
@@ -113,7 +103,7 @@ call plug#end()
   set title                                 " Show filename in titlebar
   set showmatch                             " Highlight matching parenthesis
   set scrolloff=3                           " Scroll 3 lines before window edge
-  set number                                " Line number settings
+  set nonumber                              " Line number settings
   set mouse=a                               " Automatically enable mouse usage
   set mousehide                             " Hide the mouse cursor while typing
   set hidden                                " Buffer settings
@@ -155,10 +145,6 @@ call plug#end()
   " Never do this again :set paste <ctrl-v> :set no paste
   let &t_SI .= "\<Esc>[?2004h"
   let &t_EI .= "\<Esc>[?2004l"
-
-  " Close NERDTree when the last file closes
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") &&
-          \ b:NERDTree.isTabTree()) | q | endif
   " }}}
 
 " Plugins {{{
@@ -170,8 +156,18 @@ call plug#end()
     let g:rustfmt_autosave = 1
   " }}}
 
-  " Vim-JSON {{{
-    let g:vim_json_syntax_conceal = 0
+  " Syntastic {{{
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+    let g:syntastic_aggregate_errors = 1
+    let g:syntastic_cpp_compiler = 'g++'
+    let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libc++'
   " }}}
 
   " Airline {{{
@@ -180,12 +176,6 @@ call plug#end()
     let g:airline#extensions#tabline#enabled = 1
     let g:airline_theme = 'lucius'         " Lucius, Base16, or Solarized
     set laststatus=2                       " To show status bar on startup
-  " }}}
-
-  " EasyMotion {{{
-    " <Leader>w Move to word
-    map  <Leader>w <Plug>(easymotion-bd-w)
-    nmap <Leader>w <Plug>(easymotion-overwin-w)
   " }}}
 
   " VimGo {{{
@@ -224,14 +214,7 @@ call plug#end()
 " Language {{{
   " {{{ C/C++
     let g:clang_format#code_style = 'google'
-    let g:syntastic_cpp_compiler = 'g++'
-    let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libc++'
     autocmd FileType c,cpp ClangFormatAutoEnable   " Toggle auto formatting
-  " }}}
-
-  " {{{ Ruby
-    let g:tags_ripper = 0
-    autocmd FileType ruby let g:tags_ripper = 1
   " }}}
 " }}}
 
@@ -246,7 +229,7 @@ call plug#end()
   nnoremap p p=`]<C-o>
   nnoremap P P=`]<C-o>
 
-" For when you forget to sudo.. Really Write the file.
+" For when you forget to sudo, really write the file
   cmap w!! w !sudo tee % >/dev/null
 
 " Move vertically by visual line
@@ -273,17 +256,9 @@ call plug#end()
 " Space opens/closes folds
   nnoremap <space> za
 
-" Highlight last inserted text
-  nnoremap <leader>hi `[v`]
-
 " Edit/load .vimrc bindings
   nnoremap <leader>ev :vsp $MYVIMRC<CR>
   nnoremap <leader>sv :source $MYVIMRC<CR>
-
-  nmap <S-t> :TagbarToggle<CR>
-
-" Open NERDTree with ctrl+N
-  map <C-n> :NERDTreeToggle %<CR>
 
 " Open Tagbar with Shift+T
   nmap <S-t> :TagbarToggle<CR>
@@ -370,16 +345,6 @@ call plug#end()
     endfunction
     nnoremap <leader>sw :call StripWhiteSpace()<CR>
   " }}}
-
-  " Generate tags (,rt){{{
-    function! RunTags()
-      if g:tags_ripper
-        execute "!ripper-tags -R --exclude=vendor . `bundle show --paths`"
-      else
-        execute "!/usr/bin/ctags -R ."
-      endif
-    endfunction
-    nnoremap <leader>rt :call RunTags()<CR>
   " }}}
 " }}}
 

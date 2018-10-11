@@ -11,9 +11,4 @@ function __fish_default_command_not_found_handler --on-event fish_command_not_fo
   echo "'$argv' not found"
 end
 
-
-# Autojump, install via `brew install autojump`
-[ -f /usr/local/share/autojump/autojump.fish ]; 
-and source /usr/local/share/autojump/autojump.fish
-
-source custom.fish
+source ~/.config/fish/custom.fish
