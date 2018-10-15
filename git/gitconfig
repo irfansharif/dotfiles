@@ -25,8 +25,8 @@
   ours = !git checkout --ours $@ && git add $@
   theirs = !git checkout --theirs $@ && git add $@
   addp = add --patch
-  filelog = log -u  
-	ctags = !.git/hooks/ctags
+  filelog = log -u
+  ctags = !.git/hooks/ctags
 [color]
   ui = auto
 [color "branch"]
@@ -52,7 +52,7 @@
   name = irfan sharif
   email = irfanmahmoudsharif@gmail.com
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
 [filter "lfs"]
   required = true
   clean = git-lfs clean %f
@@ -60,30 +60,31 @@
 [diff]
   tool = vimdiff
   renames = copies
-	submodule = log
+  submodule = log
   mnemonicprefix = true
-	algorithm = patience
+  algorithm = patience
 [difftool]
   prompt = false
 [core]
-	editor = /usr/local/bin/vim
+  pager = less -FMRiX
+  editor = /usr/local/bin/vim
   whitespace = space-before-tab,-indent-with-non-tab,trailing-space
-	excludesfile = ~/.gitignore-global
-	autocrlf = false
+  excludesfile = ~/.gitignore-global
+  autocrlf = false
 [push]
   default = matching
 [commit]
-	; gpgsign = true
+  ; gpgsign = true
 [pull]
-	rebase = true
+  rebase = true
 [rerere]
-	enabled = true
+  enabled = true
 [merge]
-	conflictstyle = diff3
+  conflictstyle = diff3
 [status]
-	submodulesummary = 1
+  submodulesummary = 1
 [help]
-	autocorrect = 15
+  autocorrect = 15
 [init]
   templatedir = ~/.git-template
 
