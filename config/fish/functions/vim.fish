@@ -1,3 +1,3 @@
 function vim
-  mvim -v $argv
+  nvim $argv
 end
