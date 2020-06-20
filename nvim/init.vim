@@ -1,40 +1,40 @@
 set nocompatible                          " Make Vim more useful
 
 " Plugins {{{
-" Use vim-plug to manage dependencies, stored to ~/.vim/plugged
-call plug#begin('~/.vim/plugged')
+" Use vim-plug to manage dependencies, stored to ~/.config/nvim/plugged
+call plug#begin('~/.config/nvim/plugged')
   Plug 'Konfekt/FastFold'
-  Plug 'godlygeek/tabular'
-  Plug 'plasticboy/vim-markdown'
-  Plug 'airblade/vim-gitgutter'
   Plug 'christoomey/vim-tmux-navigator'
-  Plug 'dag/vim-fish'
-  Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
-  Plug 'flazz/vim-colorschemes'
   Plug 'google/vim-searchindex'
   Plug 'irfansharif/vim-crlfmt'
-  Plug 'jceb/vim-orgmode'
+  Plug 'vim-syntastic/syntastic'
+
+  Plug 'dag/vim-fish'
+  Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
+  Plug 'ledger/vim-ledger'
+
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'ledger/vim-ledger'
-  Plug 'majutsushi/tagbar'
-  Plug 'mbbill/undotree'
+
+  Plug 'godlygeek/tabular'
   Plug 'michal-h21/vim-zettel'
-  Plug 'racer-rust/vim-racer'
-  Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
+  Plug 'plasticboy/vim-markdown'
+  Plug 'vimwiki/vimwiki'
+
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-rhubarb'
   Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-vinegar'
+
+  Plug 'airblade/vim-gitgutter'
+  Plug 'flazz/vim-colorschemes'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-syntastic/syntastic'
-  Plug 'vimwiki/vimwiki'
 call plug#end()
 " }}}
 
@@ -42,10 +42,6 @@ call plug#end()
   syntax on                                 " Syntax highlighting
   set background=dark                       " Dark background
   colorscheme solarized                     " Other options: pablo
-  let g:solarized_termtrans = 1
-  let g:solarized_termcolors = 16
-  let g:solarized_contrast = "normal"
-  let g:solarized_visibility = "normal"
 " }}}
 
 " Spacing {{{
@@ -76,11 +72,11 @@ call plug#end()
 " }}}
 
 " Undo/Backup/Swap {{{
-  if !isdirectory(expand("~/.vim/undo/"))
-    silent !mkdir -p ~/.vim/undo
+  if !isdirectory(expand("~/.config/nvim/undo/"))
+    silent !mkdir -p ~/.config/nvim/undo
   endif
 
-  set undodir^=~/.vim/undo/                  " Directory to put undo files
+  set undodir^=~/.config/nvim/undo/           " Directory to put undo files
   set undofile
   set nobackup                               " No backup files
   set nowritebackup                          " No backup files while editing
@@ -89,20 +85,19 @@ call plug#end()
 
 " Auto-complete {{{
   set wildmenu                                     " Command-line completion
-  set wildmode=list:full
+  set wildmode=list:full                           " List all matches, and complete first
   set wildignore+=.hg,.git,.svn                    " Version control
   set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
   set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " Binary images
   set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " Compiled object files
   set wildignore+=*.spl                            " Compiled spelling lists
   set wildignore+=*.sw?                            " Vim swap files
-  set wildignore+=*.DS_Store                       " OSX bullshit
+  set wildignore+=*.DS_Store                       " OSX junk
   set wildignore+=*.orig                           " Merge resolution files
 " }}}
 
 " Miscellaneous {{{
   set lazyredraw                            " Faster rendering command options
-  set ttyfast                               " Faster terminal connections
   set noeol                                 " Don’t add empty line at EOF
   set showcmd                               " Show partial command while typing
   set ruler                                 " Show line/column number of cursor
@@ -131,7 +126,6 @@ call plug#end()
   set comments=sl:/*,mb:*,elx:*/            " Auto format comment blocks
   set modelines=1                           " Last line reserved for vim actions
   set linebreak                             " Wrap lines at convenient points
-  set number                                " Show line numbers
   set shell=/usr/local/bin/fish
   autocmd VimResized * wincmd =
 
@@ -157,20 +151,7 @@ call plug#end()
       let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
   endif
 
-  " " Never do this again :set paste <ctrl-v> :set no paste
-  " let &t_SI .= "\<Esc>[?2004h"
-  " let &t_EI .= "\<Esc>[?2004l"
-  " }}}
-
 " Plugins {{{
-  " Rust.vim {{{
-    let g:racer_experimental_completer = 1
-    au FileType rust nmap <leader>gd <Plug>(rust-def)
-    au FileType rust nmap <leader>gdc <Plug>(rust-doc)
-    let g:ycm_rust_src_path = '/Users/irfansharif/.rustup/toolchains/stable-x86_64-apple-darwin/lib/rustlib/src/rust/src'
-    let g:rustfmt_autosave = 1
-  " }}}
-
   " Vim-Markdown {{{
     let g:vim_markdown_strikethrough = 1
     let g:vim_markdown_frontmatter = 1
@@ -191,7 +172,6 @@ call plug#end()
     let g:syntastic_aggregate_errors = 1
     let g:syntastic_cpp_compiler = 'g++'
     let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libc++'
-    " let g:syntastic_mode_map = {"mode": "passive", "active_filetypes": [], "passive_filetypes": [] }
   " }}}
 
   " Airline {{{
@@ -233,7 +213,7 @@ call plug#end()
     let g:vimsyn_folding = 'af'
     let g:tex_fold_enabled = 1
   " }}}
-  
+
   " Vim-CRLfmt {{{
     let g:crlfmt_options = '-fast -ignore ".*.pb(.gw)?.go -tab 2 -w"'
   " }}}
@@ -245,40 +225,36 @@ call plug#end()
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
   " }}}
-  
+
   " VimWiki {{{
-  let g:vimwiki_list = [{'path': '~/Software/src/github.com/irfansharif/wiki', 
-                      \ 'path_html': '~/Software/src/github.com/irfansharif/wiki/html/'}]
   let g:vimwiki_list = [{'path': '~/Software/src/github.com/irfansharif/wiki',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
   let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=always "
   " }}}
-  
+
   " fzf.vim {{{
   if exists('$TMUX')
-  let g:fzf_layout = { 'tmux': '-p90%,60%' }
-else
-  let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-endif
+    let g:fzf_layout = { 'tmux': '-p90%,60%' }
+  else
+    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+  endif
 
-let g:fzf_colors =
-      \ {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'gutter':  ['bg', 'Normal'],
-      \ 'border':  ['fg', 'Ignore'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment']
-      \ }
-
+  let g:fzf_colors = {
+        \ 'fg':      ['fg', 'Normal'],
+        \ 'bg':      ['bg', 'Normal'],
+        \ 'hl':      ['fg', 'Comment'],
+        \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+        \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+        \ 'hl+':     ['fg', 'Statement'],
+        \ 'info':    ['fg', 'PreProc'],
+        \ 'gutter':  ['bg', 'Normal'],
+        \ 'border':  ['fg', 'Ignore'],
+        \ 'prompt':  ['fg', 'Conditional'],
+        \ 'pointer': ['fg', 'Exception'],
+        \ 'marker':  ['fg', 'Keyword'],
+        \ 'spinner': ['fg', 'Label'],
+        \ 'header':  ['fg', 'Comment']
+        \ }
   " }}}
 " }}}
 
@@ -295,10 +271,6 @@ let g:fzf_colors =
 
 " Allow using the repeat operator with a visual selection (!)
   vnoremap . :normal .<CR>
-
-" Auto indent pasted text
-  " nnoremap p p=`]<C-o>
-  " nnoremap P P=`]<C-o>
 
 " For when you forget to sudo, really write the file
   cmap w!! w !sudo tee % >/dev/null
@@ -328,11 +300,8 @@ let g:fzf_colors =
   nnoremap <space> za
 
 " Edit/load .vimrc bindings
-  nnoremap <leader>ev :vsp $MYVIMRC<CR>
+  nnoremap <leader>ev :e $MYVIMRC<CR>
   nnoremap <leader>sv :source $MYVIMRC<CR>
-
-" Open Tagbar with Shift+T
-  nmap <S-t> :TagbarToggle<CR>
 
   " Map Ctrl+V to paste, Ctrl+C to copy, paste shortcut with paste toggle
   imap <C-V> <C-R>*

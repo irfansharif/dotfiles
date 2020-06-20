@@ -2,6 +2,7 @@
 # ignoring the `.git` directory listing directories first. Output is
 # piped into `less` with options to preserve color and line numbers
 # unless small enough for one screen.
+
 function tre
   if count $argv > /dev/null
     tree -aC -I '.git|node_modules' --dirsfirst "$argv" | less -FRX
