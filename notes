@@ -4,18 +4,43 @@
 - reattach-to-user-namespace dependency before tmux;
 - Dependency on rainbow gem, which in turn depends on >= ruby 2.1.0 (not supported out of the box)
 - tic italics situation, use terminfo files directly; https://apple.stackexchange.com/questions/249307/tic-doesnt-read-from-stdin-and-segfaults-when-adding-terminfo-to-support-italic/249385 solution #1;
-- Oh my fish install while configuring fish;
 - Install autojump
 - Allow independent installation of components/configs (i.e. tmux, vim, fish). Rename Software to Workspace, global env $WORKSPACE
 - Scaffold setup script, Workspace/{src,bin}/{...}
 - Macvim installation
-- Touch ~/.vimrc.custom
 - PlugInstall
 - PowerlineFonts
 - SSH term env var
+- install homebrew
+- install fish
+- install oh-my-fish
+- install neovim
+- install ripgrep
+- neovim instead of vim, uses neovim specific folders including init.vim
 
 - non-mac setup, linux
 - autojump for linux
 - bind-copy Enter, copy selection not needed?
 - allow apps to access clipboard iterm2 preference.
 - dotfiles dir, hidden root folder instead of assuming $WORKSPACE/src/github.com/irfansharif/dotfiles/...
+
+
+==========
+
+gceworker
+
+ruby installation
+linking instructions didn't work
+tmux shell didn't work
+fish not installed
+neovim not installed
+omf not installed
+autojump
+capture cmd+<-/-> remap to home/end in iterm: https://stackoverflow.com/questions/6205157/iterm-2-how-to-set-keyboard-shortcuts-to-jump-to-beginning-end-of-line
+capture golink service
+capture ergodox configs
+
+https://twitter.com/burkelibbey/status/1258448401986990082 (use nix)
+https://twitter.com/Sirupsen/status/1248617079776768008/photo/1 (tmux pane fzf)
+clean up fzf ui
+find a good way to run bash scripts in line

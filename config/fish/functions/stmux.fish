@@ -1,3 +1,3 @@
 function stmux
-  ruby $GITHUBPATH/irfansharif/dotfiles/tmux/stmux.rb
+  ~/Software/src/github.com/irfansharif/dotfiles/tmux/stmux.rb
 end

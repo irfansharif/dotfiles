@@ -5,6 +5,7 @@ Thumbs.db
 .AppleDouble
 .LSOverride
 Icon
+.idea
 
 # Thumbnails
 ._*
@@ -35,5 +36,8 @@ vimrc.local
 Session.vim
 .netrwhist
 *~
+
+*.fls
+*.fdb_latexmk
 
 # vim:ft=conf

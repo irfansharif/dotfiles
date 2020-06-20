@@ -1,32 +1,33 @@
 [alias]
-  l = log --pretty=oneline -n 20 --graph --abbrev-commit
-  tags = tag -l
-  branches = branch -a
-  remotes = remote -v
+  addp = add --patch
   amend = commit --amend --reuse-message=HEAD
-  contributors = shortlog --summary --numbered
-  log = log --decorate --graph --relative-date --stat
-  hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
-  d = difftool
-  uncommit = reset --soft HEAD~
+  assume   = update-index --assume-unchanged
+  assumed  = !git ls-files -v | grep ^h | cut -c 3-
+  branches = branch -a
   co = checkout
-  unstage = reset HEAD --
-  last = log -1 HEAD -p
   commit = commit -v
-  merged = branch --merged
-  unmerged = branch --no-merged
+  contributors = shortlog --summary --numbered
+  ctags = !.git/hooks/ctags
+  d = difftool
   diffc = diff --check
   diffs = diff --staged
-  assume   = update-index --assume-unchanged
-  unassume = update-index --no-assume-unchanged
-  assumed  = !git ls-files -v | grep ^h | cut -c 3-
+  filelog = log -u
+  graph = log --graph --oneline --all
+  hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
+  l = log --pretty=oneline -n 20 --graph --abbrev-commit
+  last = log -1 HEAD -p
+  log = log --decorate --graph --relative-date --stat
+  merged = branch --merged
+  ours = !git checkout --ours $@ && git add $@
+  remotes = remote -v
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   snapshots = !git stash list --grep snapshot
-  ours = !git checkout --ours $@ && git add $@
+  tags = tag -l
   theirs = !git checkout --theirs $@ && git add $@
-  addp = add --patch
-  filelog = log -u
-  ctags = !.git/hooks/ctags
+  unassume = update-index --no-assume-unchanged
+  uncommit = reset --soft HEAD~
+  unmerged = branch --no-merged
+  unstage = reset HEAD --
 [color]
   ui = auto
 [color "branch"]
@@ -63,16 +64,28 @@
   submodule = log
   mnemonicprefix = true
   algorithm = patience
+[merge]
+  tool = vimdiff
+[mergetool]
+  prompt = true
+[mergetool "vimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE 
+[difftool]
+  prompt = false
+[diff]
+  tool = vimdiff
 [difftool]
   prompt = false
 [core]
   pager = less -FMRiX
-  editor = /usr/local/bin/vim
+  editor = /usr/local/bin/nvim
   whitespace = space-before-tab,-indent-with-non-tab,trailing-space
   excludesfile = ~/.gitignore-global
   autocrlf = false
+[checkout]
+  defaultRemote = origin 
 [push]
-  default = matching
+	default = current
 [commit]
   ; gpgsign = true
 [pull]
@@ -87,5 +100,10 @@
   autocorrect = 15
 [init]
   templatedir = ~/.git-template
+[submodule]
+  recurse = true
+
 
 # vim:ft=gitconfig
+[github]
+	user = irfansharif

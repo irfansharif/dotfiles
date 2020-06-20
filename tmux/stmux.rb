@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 exit if ENV["TMUX"]
 
-trap("SIGINT") { 
+trap("SIGINT") {
   exit
 }
 
-require 'rainbow'
 require 'readline'
 
 l = %w(admiring adoring affectionate agitated amazing angry awesome
@@ -47,8 +46,8 @@ generated_name = "#{l.sample}-#{r.sample}"
 
 `tmux has-session -t primary-session || tmux new-session -s primary-session -d`
 existing_sessions = `tmux list-sessions -F "#S"`.split(/\n/).sort
-available_options = ['primary-session'] + 
-                    (existing_sessions - ["primary-session"]) + 
+available_options = ['primary-session'] +
+                    (existing_sessions - ["primary-session"]) +
                     [generated_name, 'no-session']
 
 Readline.completion_proc = proc { |s|
@@ -56,19 +55,32 @@ Readline.completion_proc = proc { |s|
 }
 
 system 'clear'
-print Rainbow("Ongoing sessions (#{available_options.length - 1}): ")
-  .color("B58900") + "\t"
+
+class String
+  def solarized_yellow
+    "\e[38;5;136m" + self + "\e[0m"
+  end
+
+  def solarized_orange
+    "\e[38;5;166m" + self + "\e[0m"
+  end
+
+  def solarized_blue
+    "\e[38;5;32m" + self + "\e[0m"
+  end
+end
+
+print "Ongoing sessions (#{available_options.length - 1}): \t".solarized_yellow
 
 available_options.each_with_index do |option, index|
   print "\t\t\t" if index > 0
-  puts Rainbow("(#{index}) #{option}").color("CB4B16")
+  puts "(#{index}) #{option}".solarized_orange
 end
 
 puts
 
 choice = Readline.readline(
-  Rainbow("Choose/name your session (default, #{generated_name}): ")
-  .color("0087FF"), true)
+      "Choose/name your session (default, #{generated_name}): ".solarized_blue, true)
   .strip
 
 if choice == "no-session"

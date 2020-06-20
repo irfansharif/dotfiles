@@ -1,0 +1,1 @@
+/Users/irfansharif/.local/share/omf/themes/robbyrussell/fish_right_prompt.fish
