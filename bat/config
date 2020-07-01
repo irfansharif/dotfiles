@@ -3,5 +3,6 @@
 # run `bat --help` to get a list of all possible configuration options.
 
 --theme="Solarized (dark)"
+--color=always
 --italic-text=always
 --style=plain,changes,numbers
