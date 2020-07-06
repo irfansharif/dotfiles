@@ -22,6 +22,8 @@ set nocompatible                          " Make Vim more useful
     Plug 'michal-h21/vim-zettel'
     Plug 'plasticboy/vim-markdown'
     Plug 'vimwiki/vimwiki'
+    " Plug 'tbabej/taskwiki'
+    " Plug 'blindFS/vim-taskwarrior'
 
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-eunuch'
@@ -112,7 +114,6 @@ set nocompatible                          " Make Vim more useful
 " Language {{{
   " {{{ C/C++
     let g:clang_format#code_style = 'google'
-    autocmd FileType c,cpp ClangFormatAutoEnable   " Toggle auto formatting
   " }}}
 " }}}
 
@@ -148,8 +149,8 @@ set nocompatible                          " Make Vim more useful
   set linebreak                             " Wrap lines at convenient points
   set clipboard=unnamed                     " Use OS clipboard
   set shell=/usr/local/bin/fish             " Set default shell
+  set noequalalways                         " Don't auto-resize buffer sizes on close
 
-  autocmd VimResized * wincmd =
   let mapleader = ","                       " Change mapleader
   scriptencoding utf-8                      " Default to UTF-8 encoding
 
@@ -179,7 +180,12 @@ set nocompatible                          " Make Vim more useful
   nnoremap J gj
   nnoremap K gk
 
+  " Insert current date in two different formats
   noremap! <expr> ,T strftime("%B %d, %Y")
+  noremap! <expr> ,t strftime("%Y-%m-%d")
+
+  " Shorthand for closing all buffers but current
+  command! BO silent! execute "%bd|e#|bd#"
 
   " Search mappings: These will make it so that going to the next one in a
   " search will center on the line it's found in
@@ -363,8 +369,31 @@ set nocompatible                          " Make Vim more useful
     nmap ga <Plug>(EasyAlign)
   " }}}
 
+" fzf.vim {{{
+    autocmd! FileType fzf
+    autocmd  FileType fzf set noshowmode noruler nonu
+
+    if exists('$TMUX')
+      let g:fzf_layout = { 'tmux': '-p90%,60%' }
+    else
+      let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+    endif
+
+    function! RipgrepFzf(query, fullscreen)
+      let command_fmt = 'rg --column --line-number --no-heading --color=never --smart-case -- %s || true'
+      let initial_command = printf(command_fmt, shellescape(a:query))
+      let reload_command = printf(command_fmt, '{q}')
+      let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+      call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    endfunction
+    command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+
+    nnoremap <Leader>zo :Files<CR>
+    nnoremap <Leader>zs :RG<CR>
+    imap <c-o><c-f> <plug>(fzf-complete-path)
+" }}}
+
   " vimwiki {{{
-    " Duplicating the entry here due to https://github.com/michal-h21/vim-zettel/issues/10.
     let g:vimwiki_list = [
       \ {
         \ 'path': '~/Software/src/github.com/irfansharif/wiki',
@@ -382,13 +411,12 @@ set nocompatible                          " Make Vim more useful
     let g:vimwiki_key_mappings = { 'all_maps': 0 }    " Disable all key mapping by default
     let g:vimwiki_hl_cb_checked = 2                   " Colors checked off items with comment-like syntax
     let g:vimwiki_global_ext = 0                      " Only use vimwiki within configured spaces
-    let g:vimwiki_listsyms = ' -x'                    " Progression of checklist item (alternatively ○◐●)
+    let g:vimwiki_listsyms = ' :x'                    " Progression of checklist item (alternatively ○◐●)
     let g:vimwiki_listsym_rejected = '/'              " Rejected checklist item (alternatively: ⨯)
-    let g:vimwiki_folding = 'list:quick'              " Use list folding for checklist view summarization
     let g:vim_markdown_folding_disabled = 1           " Disable plasticboy/vim-markdown folding
+    let g:vimwiki_folding = 'list:quick'              " Use list folding for checklist view summarization
     let g:vimwiki_conceal_pre = 1                     " Conceal code annotations
-    let g:vimwiki_links_header = 'Links'
-    let g:vimwiki_tags_header = 'Tags'
+    let g:vimwiki_tags_header = 'Tags'                " Generated tags header
 
     nmap = <Plug>VimwikiAddHeaderLevel
     nmap - <Plug>VimwikiRemoveHeaderLevel
@@ -397,17 +425,18 @@ set nocompatible                          " Make Vim more useful
     nmap <C-]> :w<cr><Plug>VimwikiFollowLink
     nmap <C-[> :w<cr><Plug>VimwikiGoBackLink
 
-    " Option + {j,k,[,]}
+    " Link subcommands: Option + {j,k,[,]}
     nmap ∆ <Plug>VimwikiNextLink
     nmap ˚ <Plug>VimwikiPrevLink
-    nmap ‘ :w<cr><Plug>VimwikiVSplitLink
+    nmap ‘ :w<cr><Plug>VimwikiVSplitLink:exe "vertical resize " . (winwidth(0) * 5/3)<cr>
     nmap “ :w<cr>:bd<cr>
 
-    " List subcommands: Ctrl+{ ,/,-,n}
+    " List subcommands: Ctrl + { ,n,/,;}
+    " nmap <C-Space> <Plug>VimwikiToggleListItem
     nmap <C-Space> <Plug>VimwikiToggleListItem
-    nmap  <Plug>VimwikiToggleRejectedListItem
-    nmap  <Plug>VimwikiIncrementListItem
     nmap <C-n> <Plug>VimwikiNextTask
+    nmap  <Plug>VimwikiToggleRejectedListItem
+    nmap ; <Plug>VimwikiIncrementListItem
 
     nmap gll <Plug>VimwikiIncreaseLvlWholeItem
     nmap glh <Plug>VimwikiDecreaseLvlWholeItem
@@ -422,17 +451,6 @@ set nocompatible                          " Make Vim more useful
     " Define custom list <CR> behavior. See :h vimwiki, section 8.
     autocmd FileType vimwiki inoremap <silent><buffer> <CR>
             \ <C-]><Esc>:VimwikiReturn 3 5<CR>
-
-    " TODO shortcut to undo linkifying.
-    " TODO Quickfix list navigation
-    " TODO Tables (sec 9)
-    " TODO scripts to run link repair, link rename, table updates.
-    " TODO Swap buffers when navigation, don't just collect it
-    "
-    " VimwikiGenerateLinks, VimwikiGenerateTagLinks, VimwikiTOC
-    " VimwikiRebuildTags, VimwikiSearchTags. VimwikiDiaryGenerateLinks,
-    " VimwikiCheckLinks, VimwikiBacklinks
-    " VimwikiTable
   " }}}
 
   " vim-zettel {{{
@@ -445,10 +463,13 @@ set nocompatible                          " Make Vim more useful
     nmap <Leader>zd <Plug>VimwikiDeleteFile
     nmap <Leader>zmv <Plug>VimwikiRenameFile
 
-    nnoremap <leader>zo :ZettelOpen<cr>
+    " Shorthand to add/remove link from inside word/selection.
+    vmap al c[]<ESC>Pla()<ESC>i
+    nmap rl lF[f(da(F[ds[
+
+    " See fzf.vim section above for alternatives to :ZettelOpen and :ZettelSearch.
     nnoremap <leader>zn :ZettelNew<space>
     nnoremap <leader>zi :ZettelInbox<cr>
-    nnoremap <leader>zs :ZettelSearch<cr>
     nnoremap <leader>zt :VimwikiSearchTags<space>
     nnoremap <leader>zy :ZettelYankName<cr>
     nnoremap <leader>zb :ZettelBackLinks<cr>
@@ -456,30 +477,11 @@ set nocompatible                          " Make Vim more useful
     nnoremap <leader>zgt :VimwikiRebuildTags!<cr>:VimwikiGenerateTagLinks<cr><c-l>
   " }}}
 
-" fzf.vim {{{
-    autocmd! FileType fzf
-    autocmd  FileType fzf set noshowmode noruler nonu
-
-    if exists('$TMUX')
-      let g:fzf_layout = { 'tmux': '-p90%,60%' }
-    else
-      let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
-    endif
-
-    function! RipgrepFzf(query, fullscreen)
-      let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-      let initial_command = printf(command_fmt, shellescape(a:query))
-      let reload_command = printf(command_fmt, '{q}')
-      let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-      call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-    endfunction
-    command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-    nnoremap <Leader><Leader>f :Files<CR>
-    nnoremap <Leader><Leader>t :RG<CR>
-
-    imap <c-o><c-f> <plug>(fzf-complete-path)
-" }}}
+  " taskwiki {{{
+    let g:taskwiki_markup_syntax = "markdown"
+    let g:taskwiki_disable_concealcursor = "yes"
+    let g:taskwiki_source_tw_colors = "yes"
+  " }}}
 " }}}
 
-" vim:foldmethod=marker:foldlevel=0
+" vim:foldmethod=marker:foldlevel=1
