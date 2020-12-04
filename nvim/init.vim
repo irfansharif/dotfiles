@@ -9,6 +9,7 @@ set nocompatible                          " Make Vim more useful
     Plug 'irfansharif/vim-crlfmt'
     Plug 'vim-syntastic/syntastic'
 
+    Plug 'elixir-editors/vim-elixir'
     Plug 'dag/vim-fish'
     Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
     Plug 'ledger/vim-ledger'
@@ -396,7 +397,8 @@ set nocompatible                          " Make Vim more useful
   " vimwiki {{{
     let g:vimwiki_list = [
       \ {
-        \ 'path': '~/Software/src/github.com/irfansharif/wiki',
+        \ 'path': '~/Software/src/github.com/irfansharif/zettel',
+        \ 'index': 'zettelkasten',
         \ 'name': "@irfansharif's wiki",
         \ 'auto_toc': 0,
         \ 'auto_tags': 0,
@@ -424,6 +426,7 @@ set nocompatible                          " Make Vim more useful
     nmap ]] <Plug>VimwikiGoToNextHeader
     nmap <C-]> :w<cr><Plug>VimwikiFollowLink
     nmap <C-[> :w<cr><Plug>VimwikiGoBackLink
+    " TODO ^ Maps to <Esc>
 
     " Link subcommands: Option + {j,k,[,]}
     nmap ∆ <Plug>VimwikiNextLink
@@ -462,19 +465,20 @@ set nocompatible                          " Make Vim more useful
     nmap <Leader>zz <Plug>VimwikiIndex
     nmap <Leader>zd <Plug>VimwikiDeleteFile
     nmap <Leader>zmv <Plug>VimwikiRenameFile
+    nmap <Leader>zrn :let @*=zettel#vimwiki#new_zettel_name(zettel#vimwiki#get_title(expand("%")))<cr>:VimwikiRenameFile<cr>
 
     " Shorthand to add/remove link from inside word/selection.
-    vmap al c[]<ESC>Pla()<ESC>i
+    vmap al c[]<esc>Pla()<esc>i
     nmap rl lF[f(da(F[ds[
 
     " See fzf.vim section above for alternatives to :ZettelOpen and :ZettelSearch.
-    nnoremap <leader>zn :ZettelNew<space>
+    nnoremap <leader>zn :w<cr>:ZettelNew<space>
     nnoremap <leader>zi :ZettelInbox<cr>
     nnoremap <leader>zt :VimwikiSearchTags<space>
     nnoremap <leader>zy :ZettelYankName<cr>
     nnoremap <leader>zb :ZettelBackLinks<cr>
     nnoremap <leader>zgi :ZettelGenerateLinks<cr>
-    nnoremap <leader>zgt :VimwikiRebuildTags!<cr>:VimwikiGenerateTagLinks<cr><c-l>
+    nnoremap <silent><leader>zgt :!rm .vimwiki_tags<cr>:VimwikiRebuildTags!<cr>:VimwikiGenerateTagLinks<cr><c-l>
   " }}}
 
   " taskwiki {{{

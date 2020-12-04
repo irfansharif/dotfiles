@@ -1,0 +1,187 @@
+set surround
+set commentary
+
+set nocompatible                          " Make Vim more useful
+
+" Plugins {{{
+" Use vim-plug to manage dependencies, stored to ~/.vim/plugged
+call plug#begin('~/.vim/plugged')
+  Plug 'Konfekt/FastFold'
+  Plug 'airblade/vim-gitgutter'
+  Plug 'christoomey/vim-tmux-navigator'
+  Plug 'dag/vim-fish'
+  Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoInstallBinaries' }
+  Plug 'flazz/vim-colorschemes'
+  Plug 'google/vim-searchindex'
+  Plug 'majutsushi/tagbar'
+  Plug 'mbbill/undotree'
+  Plug 'racer-rust/vim-racer'
+  Plug 'rhysd/vim-clang-format', { 'for': ['c', 'cpp', 'proto']}
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-rhubarb'
+  Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-vinegar'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'vim-syntastic/syntastic'
+call plug#end()
+" }}}
+
+" Spacing {{{
+  set autoindent                            " Autoindent
+  set expandtab                             " Tabs are spaces
+  filetype plugin indent on                 " Load filetype-specific indentation
+  set tabstop=2 shiftwidth=2 softtabstop=2  " Default tabwidth
+
+  " Language specific tabwidth
+  autocmd Filetype go setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4 textwidth=80
+" }}}
+
+" Search {{{
+  set ignorecase                            " Ignore case of searches
+  set incsearch                             " Dynamic highlighting
+  set gdefault                              " Default global search flag
+  set wrapscan                              " Wrap search around the file
+  highlight IncSearch ctermfg=15 cterm=bold,underline term=standout
+  highlight Search ctermfg=15 cterm=NONE term=standout ctermbg=NONE
+" }}}
+
+" Folding {{{
+  set foldenable
+  set foldlevelstart=10                     " Opens most folds by default
+  set foldnestmax=7                         " 8 nested fold max
+  set foldmethod=syntax                     " Folding based on file syntax
+" }}}
+
+" Undo/Backup/Swap {{{
+  if !isdirectory(expand("~/.vim/undo/"))
+    silent !mkdir -p ~/.vim/undo
+  endif
+
+  set undodir^=~/.vim/undo/                  " Directory to put undo files
+  set undofile
+  set nobackup                               " No backup files
+  set nowritebackup                          " No backup files while editing
+  set noswapfile                             " No swap files
+" }}}
+
+" Miscellaneous {{{
+  set lazyredraw                            " Faster rendering command options
+  set ttyfast                               " Faster terminal connections
+  set noeol                                 " Don’t add empty line at EOF
+  set showcmd                               " Show partial command while typing
+  set ruler                                 " Show line/column number of cursor
+  set shortmess=atIfilmnrxoOtT              " Skip intro message when starting
+  set spell                                 " Spell checking on
+  set nostartofline                         " Don't reset cursor to line start
+  set cursorline                            " Highlight current cursor line
+  set showmode                              " Show current mode
+  set title                                 " Show filename in titlebar
+  set showmatch                             " Highlight matching parenthesis
+  set scrolloff=3                           " Scroll 3 lines before window edge
+  set nonumber                              " Line number settings
+  set mouse=a                               " Automatically enable mouse usage
+  set mousehide                             " Hide the mouse cursor while typing
+  set hidden                                " Buffer settings
+  set iskeyword-=.                          " '.' is an end of word designator
+  set iskeyword-=#                          " '#' is an end of word designator
+  set iskeyword-=-                          " '-' is an end of word designator
+  set backspace=indent,eol,start            " Backspace for dummies
+  set linespace=0                           " No extra spaces between rows
+  set autowrite                             " Automatically save before :next
+  set autoread                              " Automatically reread changed files
+  set diffopt+=vertical                     " Vertical diff splits
+  set wrap                                  " Wrap long lines
+  set splitright                            " New vsplit windows to the right
+  set splitbelow                            " New split windows to the bottom
+  set comments=sl:/*,mb:*,elx:*/            " Auto format comment blocks
+  set modelines=1                           " Last line reserved for vim actions
+  set linebreak                             " Wrap lines at convenient points
+  set shell=/usr/local/bin/fish
+  autocmd VimResized * wincmd =
+
+  set clipboard=unnamed                     " Use OS clipboard
+  scriptencoding utf-8                      " Default to UTF-8 encoding
+  highlight LineNr cterm=NONE ctermbg=NONE
+  highlight MatchParen cterm=bold ctermbg=NONE ctermfg=15 term=standout
+  highlight clear SignColumn      " SignColumn should match background
+  highlight Comment cterm=italic
+  highlight clear CursorLine
+  highlight VertSplit cterm=NONE ctermbg=NONE
+  highlight CursorLineNR cterm=bold ctermfg=226
+  " Instead of reverting the cursor to the last position in the buffer, we
+  " set it to the first line when editing a git commit message
+  au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+  " Use an upright bar cursor in Insert mode, a block in normal
+  if exists('$TMUX')
+      let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+      let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  endif
+
+  " " Never do this again :set paste <ctrl-v> :set no paste
+  " let &t_SI .= "\<Esc>[?2004h"
+  " let &t_EI .= "\<Esc>[?2004l"
+  " }}}
+
+" Mappings {{{
+" Quicker exit from insert mode
+  imap jk <Esc>l
+
+  vmap gq :action com.andrewbrookins.idea.wrap.WrapAction<CR>
+  nnoremap gqq :action com.andrewbrookins.idea.wrap.WrapAction<CR>
+  vmap Q gq
+  nmap Q gqap
+
+" Allow using the repeat operator with a visual selection (!)
+  vnoremap . :normal .<CR>
+
+" Auto indent pasted text
+  " nnoremap p p=`]<C-o>
+  " nnoremap P P=`]<C-o>
+
+" For when you forget to sudo, really write the file
+  cmap w!! w !sudo tee % >/dev/null
+
+" Move vertically by visual line
+  nnoremap j gj
+  nnoremap k gk
+  nnoremap J gj
+  nnoremap K gk
+
+" Search mappings: These will make it so that going to the next one in a
+" search will center on the line it's found in
+  nnoremap n nzzzv
+  nnoremap N Nzzz
+
+" Do not show stupid q: window
+  map q: :q
+
+" Change mapleader
+  let mapleader = ","
+
+  " Map Ctrl+V to paste, Ctrl+C to copy, paste shortcut with paste toggle
+  imap <C-V> <C-R>*
+  vmap <C-C> "+y
+  nmap <C-V> "+p
+
+" Shift key fixes
+  if has("user_commands")
+    command! -bang -nargs=* -complete=file E e<bang> <args>
+    command! -bang -nargs=* -complete=file W w<bang> <args>
+    command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+    command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+    command! -bang Wa wa<bang>
+    command! -bang WA wa<bang>
+    command! -bang Q q<bang>
+    command! -bang QA qa<bang>
+    command! -bang Qa qa<bang>
+  endif
+" }}}
+" }}}
+
+" vim:foldmethod=marker:foldlevel=0
+set clipboard+=ideaput

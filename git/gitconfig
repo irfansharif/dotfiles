@@ -1,33 +1,27 @@
 [alias]
+  # Commonly used aliases.
   addp = add --patch
   amend = commit --amend --reuse-message=HEAD
-  assume   = update-index --assume-unchanged
-  assumed  = !git ls-files -v | grep ^h | cut -c 3-
   branches = branch -a
+  camend = commit --amend
   co = checkout
   commit = commit -v
-  contributors = shortlog --summary --numbered
-  ctags = !.git/hooks/ctags
-  d = difftool
-  diffc = diff --check
   diffs = diff --staged
-  filelog = log -u
-  graph = log --graph --oneline --all
-  hist = log --graph --pretty=format:'%Cred%h%Creset %s%C(yellow)%d%Creset %Cgreen(%cr)%Creset [%an]' --abbrev-commit --date=relative
-  l = log --pretty=oneline -n 20 --graph --abbrev-commit
-  last = log -1 HEAD -p
+  discard = !git stash save --keep-index --include-untracked && git stash drop
+  graph = log --graph --oneline --all --date=relative --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr)%Creset'
   log = log --decorate --graph --relative-date --stat
-  merged = branch --merged
-  ours = !git checkout --ours $@ && git add $@
-  remotes = remote -v
+  names = show --name-only --oneline
+  unassume = update-index --no-assume-unchanged
+  uncommit = reset --soft HEAD~1
+  unstage = reset HEAD --
+  # Less so.
+  assume = update-index --assume-unchanged
+  assumed = !git ls-files -v | grep ^h | cut -c 3-
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   snapshots = !git stash list --grep snapshot
   tags = tag -l
+  ours = !git checkout --ours $@ && git add $@
   theirs = !git checkout --theirs $@ && git add $@
-  unassume = update-index --no-assume-unchanged
-  uncommit = reset --soft HEAD~
-  unmerged = branch --no-merged
-  unstage = reset HEAD --
 [color]
   ui = auto
 [color "branch"]
@@ -43,8 +37,8 @@
   added = yellow
   changed = green
   untracked = cyan
-# Use `origin` as the default remote on the `master` branch in all cases
 [branch "master"]
+  # Use `origin` as the default remote on the `master` branch in all cases
   remote = origin
   merge = refs/heads/master
 [apply]
@@ -78,7 +72,7 @@
   prompt = false
 [core]
   pager = less -FMRiX
-  editor = /usr/local/bin/nvim
+  editor = nvim
   whitespace = space-before-tab,-indent-with-non-tab,trailing-space
   excludesfile = ~/.gitignore-global
   autocrlf = false
@@ -86,8 +80,6 @@
   defaultRemote = origin 
 [push]
 	default = current
-[commit]
-  ; gpgsign = true
 [pull]
   rebase = true
 [rerere]
@@ -102,8 +94,9 @@
   templatedir = ~/.git-template
 [submodule]
   recurse = true
-
-
-# vim:ft=gitconfig
 [github]
 	user = irfansharif
+[url "git@github.com:"]
+    insteadOf = "https://github.com/"
+
+# vim:ft=gitconfig

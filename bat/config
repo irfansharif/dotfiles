@@ -5,4 +5,4 @@
 --theme="Solarized (dark)"
 --color=always
 --italic-text=always
---style=plain,changes,numbers
+--style=plain,changes
