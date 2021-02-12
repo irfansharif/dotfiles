@@ -2,18 +2,24 @@
   # Commonly used aliases.
   addp = add --patch
   amend = commit --amend --reuse-message=HEAD
-  branches = branch -a
   camend = commit --amend
   co = checkout
+  cp = cherry-pick
   commit = commit -v
   diffs = diff --staged
   discard = !git stash save --keep-index --include-untracked && git stash drop
+  dbranch = branch -D
   graph = log --graph --oneline --all --date=relative --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr)%Creset'
   log = log --decorate --graph --relative-date --stat
   names = show --name-only --oneline
+  r = reset
+  rb = rebase
   unassume = update-index --no-assume-unchanged
   uncommit = reset --soft HEAD~1
   unstage = reset HEAD --
+  alias = "!f() { git symbolic-ref \"refs/heads/$1\" \"refs/heads/$2\"; }; f"
+  dalias = "!f() { git symbolic-ref -d \"refs/heads/$1\" ; }; f"
+
   # Less so.
   assume = update-index --assume-unchanged
   assumed = !git ls-files -v | grep ^h | cut -c 3-

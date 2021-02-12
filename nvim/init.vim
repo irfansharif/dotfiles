@@ -8,6 +8,7 @@ set nocompatible                          " Make Vim more useful
     Plug 'google/vim-searchindex'
     Plug 'irfansharif/vim-crlfmt'
     Plug 'vim-syntastic/syntastic'
+    Plug 'google/vim-jsonnet'
 
     Plug 'elixir-editors/vim-elixir'
     Plug 'dag/vim-fish'
@@ -23,8 +24,6 @@ set nocompatible                          " Make Vim more useful
     Plug 'michal-h21/vim-zettel'
     Plug 'plasticboy/vim-markdown'
     Plug 'vimwiki/vimwiki'
-    " Plug 'tbabej/taskwiki'
-    " Plug 'blindFS/vim-taskwarrior'
 
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-eunuch'
@@ -105,10 +104,17 @@ set nocompatible                          " Make Vim more useful
       silent !mkdir -p ~/.config/nvim/undo
     endif
 
+    if !isdirectory(expand("~/.config/nvim/backup/"))
+      silent !mkdir -p ~/.config/nvim/backup
+    endif
+
     set undodir^=~/.config/nvim/undo/           " Directory to put undo files
+    set backupdir^=~/.config/nvim/backup/       " Directory to put undo files
     set undofile
-    set nobackup                               " No backup files
-    set nowritebackup                          " No backup files while editing
+    " set nobackup                               " No backup files
+    " set nowritebackup                          " No backup files while editing
+    set backup                               " No backup files
+    set writebackup                          " No backup files while editing
     set noswapfile                             " No swap files
   " }}}
 
@@ -241,16 +247,16 @@ set nocompatible                          " Make Vim more useful
   " Toggle over length highlighting (,ol) {{{
     function! ToggleOverLengthIndicator()
         if g:over_length_hl_enabled
-            highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
             let g:over_length_hl_enabled = 0
+            set colorcolumn=80
+            let &colorcolumn="".join(range(80,999),",")
         else
-            highlight OverLength ctermbg=NONE ctermfg=red cterm=bold
             let g:over_length_hl_enabled = 1
+            set colorcolumn=0
         endif
     endfunction
     let g:over_length_hl_enabled = 1
-    highlight OverLength ctermbg=NONE ctermfg=NONE cterm=NONE
-    match OverLength /\%81v.\+/
+    highlight ColorColumn ctermbg=00
     nnoremap <leader>ol :call ToggleOverLengthIndicator()<CR>
   " }}}
 
@@ -414,16 +420,19 @@ set nocompatible                          " Make Vim more useful
     let g:vimwiki_hl_cb_checked = 2                   " Colors checked off items with comment-like syntax
     let g:vimwiki_global_ext = 0                      " Only use vimwiki within configured spaces
     let g:vimwiki_listsyms = ' :x'                    " Progression of checklist item (alternatively ○◐●)
-    let g:vimwiki_listsym_rejected = '/'              " Rejected checklist item (alternatively: ⨯)
+    let g:vimwiki_listsym_rejected = '/'              " Rejected checklist item (alternatively: ⨯,/)
     let g:vim_markdown_folding_disabled = 1           " Disable plasticboy/vim-markdown folding
     let g:vimwiki_folding = 'list:quick'              " Use list folding for checklist view summarization
     let g:vimwiki_conceal_pre = 1                     " Conceal code annotations
+    let g:vimwiki_conceallevel = 2
     let g:vimwiki_tags_header = 'Tags'                " Generated tags header
 
     nmap = <Plug>VimwikiAddHeaderLevel
     nmap - <Plug>VimwikiRemoveHeaderLevel
     nmap [[ <Plug>VimwikiGoToPrevHeader
     nmap ]] <Plug>VimwikiGoToNextHeader
+    nmap HH :lprev<cr>
+    nmap LL :lnext<cr>
     nmap <C-]> :w<cr><Plug>VimwikiFollowLink
     nmap <C-[> :w<cr><Plug>VimwikiGoBackLink
     " TODO ^ Maps to <Esc>
@@ -460,7 +469,7 @@ set nocompatible                          " Make Vim more useful
     let g:zettel_fzf_command = "rg --column --line-number --ignore-case --no-heading --color=never"
     let g:zettel_format = "%y%m%d-%file_alpha%file_no-%title"
     let g:zettel_date_format = "%y/%m/%d"
-    let g:zettel_options = [{"front_matter" : {"tags" : ""}, "template" : "~/Software/src/github.com/irfansharif/wiki/tpl/zettel.tpl"}]
+    let g:zettel_options = [{"front_matter" : {"tags" : ""}, "template" : "~/Software/src/github.com/irfansharif/zettel/tpl/zettel.tpl"}]
 
     nmap <Leader>zz <Plug>VimwikiIndex
     nmap <Leader>zd <Plug>VimwikiDeleteFile
