@@ -1,6 +1,6 @@
-set --export PATH $PATH /usr/sbin /sbin /usr/local/bin /usr/bin /bin
+set --export GOROOT /usr/local/Cellar/go/1.17.2/libexec
 set --export GOPATH $HOME/Software
-set --export PATH $PATH $GOPATH/bin
+set --export PATH $PATH /usr/sbin /sbin /usr/local/bin /usr/bin /bin $GOPATH/bin $GOROOT/bin $HOME/Bin
 
 set --export FZF_DEFAULT_OPTS \
   '--height 40% --layout=reverse --border=sharp' \
@@ -10,3 +10,5 @@ set --export FZF_DEFAULT_OPTS \
 set --export FZF_CTRL_T_COMMAND 'fd --type file --exclude .git --exclude pkg/ui --exclude vendor --exclude c-deps --exclude artifacts --follow'
 set --export FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git --exclude artifacts'
 set --export HOMEBREW_EDITOR nvim
+
+# set --erase LC_ALL 

@@ -168,6 +168,8 @@ set nocompatible                          " Make Vim more useful
   " Custom filetypes
   autocmd BufNewFile,BufRead *.log set filetype=crlog
   autocmd BufNewFile,BufRead *.ledger set filetype=ledger
+  autocmd BufNewFile,BufRead *.i set filetype=swig
+  autocmd BufNewFile,BufRead *.swg set filetype=swig
   autocmd FileType ledger setlocal commentstring=;\ %s
 " }}}
 
@@ -284,6 +286,18 @@ set nocompatible                          " Make Vim more useful
     endfunction
     nnoremap <leader>cd :call ChangeCurrentDirectory()<CR>
   " }}}
+  "
+
+    function! SoftWrap()
+      let s:old_fo = &formatoptions
+      let s:old_tw = &textwidth
+      set fo=
+      set tw=999999 " works for paragraphs up to 12k lines
+      normal gggqG
+      let &fo = s:old_fo
+      let &tw = s:old_tw
+    endfunction
+    nnoremap <leader>sow :call SoftWrap()<CR>
 
   " Strip trailing white space (,sw) {{{
     function! StripWhiteSpace()

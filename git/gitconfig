@@ -3,6 +3,7 @@
   addp = add --patch
   amend = commit --amend --reuse-message=HEAD
   camend = commit --amend
+  bdiff = diff --text
   co = checkout
   cp = cherry-pick
   commit = commit -v
@@ -17,16 +18,16 @@
   unassume = update-index --no-assume-unchanged
   uncommit = reset --soft HEAD~1
   unstage = reset HEAD --
-  alias = "!f() { git symbolic-ref \"refs/heads/$1\" \"refs/heads/$2\"; }; f"
-  dalias = "!f() { git symbolic-ref -d \"refs/heads/$1\" ; }; f"
 
   # Less so.
+  alias = "!f() { git symbolic-ref \"refs/heads/$1\" \"refs/heads/$2\"; }; f"
   assume = update-index --assume-unchanged
   assumed = !git ls-files -v | grep ^h | cut -c 3-
+  dalias = "!f() { git symbolic-ref -d \"refs/heads/$1\" ; }; f"
+  ours = !git checkout --ours $@ && git add $@
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   snapshots = !git stash list --grep snapshot
   tags = tag -l
-  ours = !git checkout --ours $@ && git add $@
   theirs = !git checkout --theirs $@ && git add $@
 [color]
   ui = auto
@@ -98,8 +99,9 @@
   autocorrect = 15
 [init]
   templatedir = ~/.git-template
+  defaultBranch = master
 [submodule]
-  recurse = true
+  recurse = false
 [github]
 	user = irfansharif
 [url "git@github.com:"]

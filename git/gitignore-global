@@ -6,6 +6,7 @@ Thumbs.db
 .LSOverride
 Icon
 .idea
+.ijwb
 
 # Thumbnails
 ._*
@@ -39,5 +40,8 @@ Session.vim
 
 *.fls
 *.fdb_latexmk
+
+*.txt
+*.out
 
 # vim:ft=conf
