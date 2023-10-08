@@ -10,8 +10,10 @@
   diffs = diff --staged
   discard = !git stash save --keep-index --include-untracked && git stash drop
   dbranch = branch -D
-  graph = log --graph --oneline --all --date=relative --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr)%Creset'
-  log = log --decorate --graph --relative-date --stat
+  graph = log --graph --oneline --all --relative-date --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr)%Creset'
+  l = log --no-merges --decorate --graph --relative-date --stat
+  hist = graph
+  tree = graph
   names = show --name-only --oneline
   r = reset
   rb = rebase
@@ -54,11 +56,12 @@
   name = irfan sharif
   email = irfanmahmoudsharif@gmail.com
 [credential]
-  helper = osxkeychain
+	helper = store
 [filter "lfs"]
   required = true
-  clean = git-lfs clean %f
-  smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
 [diff]
   tool = vimdiff
   renames = copies
@@ -108,3 +111,5 @@
     insteadOf = "https://github.com/"
 
 # vim:ft=gitconfig
+[http]
+	cookiefile = /Users/irfansharif/.gitcookies

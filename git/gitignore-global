@@ -44,4 +44,11 @@ Session.vim
 *.txt
 *.out
 
+go/
+.bazeliskrc
+.bazel
+
+build_event_binary_file
+
 # vim:ft=conf
+#

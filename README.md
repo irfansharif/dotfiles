@@ -29,7 +29,7 @@ function install {
   ln -sf ${SRCTREE}/nvim ~/.config/nvim
   ln -sf ${SRCTREE}/fish ~/.config/fish
   ln -sf ${SRCTREE}/bat ~/.config/bat
-  
-  # ln -sf ${SRCTREE}/misc/ctags ~/.ctags
+  ln -sf ${SRCTREE}/alacritty ~/.config/alacritty
+  ln -sf ${SRCTREE}/idea/ideavimrc ~/.ideavimrc
 }
 ```

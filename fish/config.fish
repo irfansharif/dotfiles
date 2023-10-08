@@ -5,8 +5,13 @@ function __fish_default_command_not_found_handler --on-event fish_command_not_fo
   echo "'$argv' not found"
 end
 
+function fish_user_key_bindings
+  # Hides the annoying ^C character in fish.
+  bind \cc 'commandline ""'
+
+  # Comes with `brew install fzf`. Also needs `brew install fd`.
+  fzf_key_bindings
+end
+
 source ~/.config/fish/custom.fish
 source ~/.config/fish/alias.fish
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/irfansharif/Downloads/google-cloud-sdk/path.fish.inc' ]; . '/Users/irfansharif/Downloads/google-cloud-sdk/path.fish.inc'; end

@@ -7,7 +7,7 @@ set nocompatible                          " Make Vim more useful
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'google/vim-searchindex'
     Plug 'irfansharif/vim-crlfmt'
-    Plug 'vim-syntastic/syntastic'
+    " Plug 'vim-syntastic/syntastic'
     Plug 'google/vim-jsonnet'
 
     Plug 'elixir-editors/vim-elixir'
@@ -155,7 +155,7 @@ set nocompatible                          " Make Vim more useful
   set modelines=1                           " Last line reserved for vim actions
   set linebreak                             " Wrap lines at convenient points
   set clipboard=unnamed                     " Use OS clipboard
-  set shell=/usr/local/bin/fish             " Set default shell
+  set shell=/opt/homebrew/bin/fish          " Set default shell
   set noequalalways                         " Don't auto-resize buffer sizes on close
 
   let mapleader = ","                       " Change mapleader
@@ -320,20 +320,20 @@ set nocompatible                          " Make Vim more useful
   " }}}
 
   " syntastic {{{
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
+   " set statusline+=%#warningmsg#
+   " set statusline+=%{SyntasticStatuslineFlag()}
+   " set statusline+=%*
 
-    let g:syntastic_quiet_messages = { "type": "style" }
-    let g:syntastic_always_populate_loc_list = 0
-    let g:syntastic_auto_loc_list = 0
-    let g:syntastic_check_on_open = 0
-    let g:syntastic_check_on_wq = 0
-    let g:syntastic_aggregate_errors = 1
-    let g:syntastic_cpp_compiler = 'g++'
-    let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libc++'
-    let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-    let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+   " let g:syntastic_quiet_messages = { "type": "style" }
+   " let g:syntastic_always_populate_loc_list = 0
+   " let g:syntastic_auto_loc_list = 0
+   " let g:syntastic_check_on_open = 0
+   " let g:syntastic_check_on_wq = 0
+   " let g:syntastic_aggregate_errors = 1
+   " let g:syntastic_cpp_compiler = 'g++'
+   " let g:syntastic_cpp_compiler_options = '-std=c++11 -stdlib=libc++'
+   " let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+   " let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
   " }}}
 
   " vim-airline {{{
@@ -351,7 +351,9 @@ set nocompatible                          " Make Vim more useful
     let g:go_highlight_interfaces = 1
     let g:go_highlight_operators = 1
     let g:go_highlight_build_constraints = 1
+    let g:go_gopls_enabled = 0
     let g:go_fmt_command = "goimports"
+    let g:go_bin_path = expand("/opt/homebrew/bin/go")
 
     au FileType go nmap <leader>gr <Plug>(go-run)
     au FileType go nmap <leader>gb <Plug>(go-build)
