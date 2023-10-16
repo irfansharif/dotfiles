@@ -44,11 +44,8 @@ r = %w(albattani allen almeida agnesi archimedes ardinghelli aryabhata
 
 generated_name = "#{l.sample}-#{r.sample}"
 
-`tmux has-session -t primary-session || tmux new-session -s primary-session -d`
 existing_sessions = `tmux list-sessions -F "#S"`.split(/\n/).sort
-available_options = ['primary-session'] +
-                    (existing_sessions - ["primary-session"]) +
-                    [generated_name, 'no-session']
+available_options = existing_sessions + [generated_name, 'dev-box', 'no-session']
 
 Readline.completion_proc = proc { |s|
   available_options.grep( /^#{Regexp.escape(s)}/ )
@@ -79,14 +76,26 @@ end
 
 puts
 
+default_choice = generated_name
+if existing_sessions.length() > 0
+  default_choice = existing_sessions[0]
+end
+
 choice = Readline.readline(
-      "Choose/name your session (default, #{generated_name}): ".solarized_blue, true)
+      "Choose/name your session (default, #{default_choice}): ".solarized_blue, true)
   .strip
 
 if choice == "no-session"
   exit
-elsif available_options.include?(choice) and choice != generated_name
+elsif choice == "dev-box"
+  system 'ssh modal-dev2'
+  exit
+elsif (available_options.include?(choice) and choice != generated_name)
   `tmux attach-session -t #{choice}`
-else
-  `tmux new -s #{choice.nil? or choice.empty? ? generated_name : choice}`
+elsif (choice.nil? or choice.empty?)
+  if existing_sessions.include?(default_choice)
+    `tmux attach-session -t #{default_choice}`
+  else
+    `tmux new -s #{default_choice}`
+  end
 end
