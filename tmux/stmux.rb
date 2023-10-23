@@ -92,7 +92,13 @@ elsif choice == "dev-box"
   exit
 elsif (available_options.include?(choice) and choice != generated_name)
   `tmux attach-session -t #{choice}`
-elsif (choice.nil? or choice.empty?)
+else
+  if choice.nil? or choice.empty?
+    choice = default_choice
+  elsif
+    choice = default_choice
+  end
+
   if existing_sessions.include?(default_choice)
     `tmux attach-session -t #{default_choice}`
   else

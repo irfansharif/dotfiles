@@ -1,5 +1,5 @@
 function z
-  cd ~/Software/src/github.com/irfansharif/zettel
+  cd ~/Remote/zettel
   nvim zettelkasten.md
   cd - > /dev/null
 end

@@ -6,9 +6,9 @@ set nocompatible                          " Make Vim more useful
     Plug 'Konfekt/FastFold'
     Plug 'christoomey/vim-tmux-navigator'
     Plug 'google/vim-searchindex'
-    Plug 'irfansharif/vim-crlfmt'
-    " Plug 'vim-syntastic/syntastic'
+    Plug 'vim-syntastic/syntastic'
     Plug 'google/vim-jsonnet'
+    Plug 'rust-lang/rust.vim'
 
     Plug 'elixir-editors/vim-elixir'
     Plug 'dag/vim-fish'
@@ -24,6 +24,7 @@ set nocompatible                          " Make Vim more useful
     Plug 'michal-h21/vim-zettel'
     Plug 'plasticboy/vim-markdown'
     Plug 'vimwiki/vimwiki'
+    Plug 'github/copilot.vim'
 
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-eunuch'
@@ -375,10 +376,6 @@ set nocompatible                          " Make Vim more useful
     let g:tex_fold_enabled = 1
   " }}}
 
-  " vim-crlfmt {{{
-    let g:crlfmt_options = '-fast -ignore ".*.pb(.gw)?.go -tab 2 -w"'
-  " }}}
-
   " vim-speeddating {{{
     " In vim-speeddating/after/plugged/speeddating.vim:
       " SpeedDatingFormat %B-%d
@@ -417,9 +414,10 @@ set nocompatible                          " Make Vim more useful
 " }}}
 
   " vimwiki {{{
+    " \ 'path': '~/Software/src/github.com/irfansharif/zettel',
     let g:vimwiki_list = [
       \ {
-        \ 'path': '~/Software/src/github.com/irfansharif/zettel',
+        \ 'path': '~/Remote/zettel',
         \ 'index': 'zettelkasten',
         \ 'name': "@irfansharif's wiki",
         \ 'auto_toc': 0,
