@@ -50,5 +50,6 @@ go/
 
 build_event_binary_file
 
+mprocs.yaml
+
 # vim:ft=conf
-#

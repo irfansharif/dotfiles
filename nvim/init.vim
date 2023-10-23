@@ -1,7 +1,7 @@
 set nocompatible                          " Make Vim more useful
 
 " Plugins {{{
-  " Use vim-plug to manage dependencies, stored to ~/.config/nvim/plugged
+  " Use vim-plug to manage dependencies, stored to ~/.config/nvim/plugged.
   call plug#begin('~/.config/nvim/plugged')
     Plug 'Konfekt/FastFold'
     Plug 'christoomey/vim-tmux-navigator'
@@ -137,7 +137,7 @@ set nocompatible                          " Make Vim more useful
   set title                                 " Show filename in titlebar
   set showmatch                             " Highlight matching parenthesis
   set scrolloff=3                           " Scroll 3 lines before window edge
-  set number                                " Line number setting
+  set nonumber                              " Line number setting
   set mouse=a                               " Automatically enable mouse usage
   set mousehide                             " Hide the mouse cursor while typing
   set hidden                                " Buffer settings
@@ -156,7 +156,7 @@ set nocompatible                          " Make Vim more useful
   set modelines=1                           " Last line reserved for vim actions
   set linebreak                             " Wrap lines at convenient points
   set clipboard=unnamed                     " Use OS clipboard
-  set shell=/opt/homebrew/bin/fish          " Set default shell
+  set shell=/usr/bin/fish                   " Set default shell
   set noequalalways                         " Don't auto-resize buffer sizes on close
 
   let mapleader = ","                       " Change mapleader
@@ -417,7 +417,7 @@ set nocompatible                          " Make Vim more useful
     " \ 'path': '~/Software/src/github.com/irfansharif/zettel',
     let g:vimwiki_list = [
       \ {
-        \ 'path': '~/Remote/zettel',
+        \ 'path': '~/remote/zettel',
         \ 'index': 'zettelkasten',
         \ 'name': "@irfansharif's wiki",
         \ 'auto_toc': 0,

@@ -5,6 +5,7 @@
   camend = commit --amend
   bdiff = diff --text
   co = checkout
+  cob = "!f() { git checkout -b irfansharif/$(date -u +'%y%m%d').$@; }; f"
   cp = cherry-pick
   commit = commit -v
   diffs = diff --staged

@@ -10,4 +10,3 @@ set --export FZF_CTRL_T_COMMAND 'fd --type file --exclude .git --exclude pkg/ui 
 set --export FZF_DEFAULT_COMMAND 'fd --type file --follow --hidden --exclude .git --exclude artifacts'
 set --export HOMEBREW_EDITOR nvim
 set --export HOMEBREW_NO_ENV_HINTS 1
-# set --export LC_ALL ""

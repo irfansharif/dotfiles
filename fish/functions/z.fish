@@ -1,5 +1,5 @@
 function z
-  cd ~/Remote/zettel
+  cd ~/remote/zettel
   nvim zettelkasten.md
   cd - > /dev/null
 end

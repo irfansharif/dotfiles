@@ -45,7 +45,7 @@ r = %w(albattani allen almeida agnesi archimedes ardinghelli aryabhata
 generated_name = "#{l.sample}-#{r.sample}"
 
 existing_sessions = `tmux list-sessions -F "#S"`.split(/\n/).sort
-available_options = existing_sessions + [generated_name, 'dev-box', 'no-session']
+available_options = existing_sessions + [generated_name, 'no-session']
 
 Readline.completion_proc = proc { |s|
   available_options.grep( /^#{Regexp.escape(s)}/ )
@@ -86,9 +86,6 @@ choice = Readline.readline(
   .strip
 
 if choice == "no-session"
-  exit
-elsif choice == "dev-box"
-  system 'ssh modal-dev2'
   exit
 elsif (available_options.include?(choice) and choice != generated_name)
   `tmux attach-session -t #{choice}`
