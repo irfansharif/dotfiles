@@ -16,6 +16,9 @@ function fish_user_key_bindings
   bind \cc 'commandline ""'
 
   # Comes with `brew install fzf`. Also needs `brew install fd`.
+  fzf --fish | source
   fzf_key_bindings
 end
+
+[ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
 

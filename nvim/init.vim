@@ -24,7 +24,6 @@ set nocompatible                          " Make Vim more useful
     Plug 'michal-h21/vim-zettel'
     Plug 'plasticboy/vim-markdown'
     Plug 'vimwiki/vimwiki'
-    Plug 'github/copilot.vim'
 
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-eunuch'
@@ -37,7 +36,7 @@ set nocompatible                          " Make Vim more useful
     Plug 'tpope/vim-vinegar'
     Plug 'tpope/vim-speeddating'
 
-    Plug 'airblade/vim-gitgutter'
+    " Plug 'airblade/vim-gitgutter'
     Plug 'flazz/vim-colorschemes'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
@@ -47,7 +46,7 @@ set nocompatible                          " Make Vim more useful
 " Theme {{{
   syntax on                                 " Syntax highlighting
   set background=dark                       " Dark background
-  colorscheme solarized                     " Other options: pablo
+  colorscheme solarized8_dark               " Other options: pablo
 
   " Custom coloring/highlighting.
   highlight clear SignColumn                " SignColumn should match background
@@ -130,7 +129,7 @@ set nocompatible                          " Make Vim more useful
   set showcmd                               " Show partial command while typing
   set ruler                                 " Show line/column number of cursor
   set shortmess=atIfilmnrxoOtT              " Skip intro message when starting
-  set spell                                 " Spell checking on
+  set nospell                               " Spell checking off
   set nostartofline                         " Don't reset cursor to line start
   set cursorline                            " Highlight current cursor line
   set showmode                              " Show current mode
@@ -156,7 +155,7 @@ set nocompatible                          " Make Vim more useful
   set modelines=1                           " Last line reserved for vim actions
   set linebreak                             " Wrap lines at convenient points
   set clipboard=unnamed                     " Use OS clipboard
-  set shell=/usr/bin/fish                   " Set default shell
+  set shell=/opt/homebrew/bin/fish          " Set default shell
   set noequalalways                         " Don't auto-resize buffer sizes on close
 
   let mapleader = ","                       " Change mapleader
