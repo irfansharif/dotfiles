@@ -1,0 +1,28 @@
+# Configuration for Ghostty, a fast, native terminal emulator.
+theme = Builtin Solarized Dark
+
+# Window settings
+window-width = 125
+window-height = 25
+window-padding-x = 20
+window-padding-y = 20
+window-decoration = true
+window-theme = dark
+
+# Font settings
+font-family = "Fira Mono for Powerline"
+font-size = 16
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-style-bold-italic = Bold Italic
+
+# Shell
+shell-integration = fish
+command = /opt/homebrew/bin/fish
+
+# Mouse
+mouse-hide-while-typing = true
+
+# Disable confirmation popup when closing tabs
+confirm-close-surface = false
