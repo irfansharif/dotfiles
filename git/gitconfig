@@ -9,6 +9,9 @@
   cp = cherry-pick
   commit = commit -v
   diffs = diff --staged
+  diffv = "!f() { if [ \"$1\" = \"--staged\" ]; then nvim -c 'DiffviewOpen --staged'; else nvim -c DiffviewOpen; fi; }; f"
+  diffsv = "!nvim -c 'DiffviewOpen --staged'"
+  showv = "!f() { ref=\"${1:-HEAD}\"; nvim -c \"DiffviewOpen $ref~1..$ref\"; }; f"
   discard = !git stash save --keep-index --include-untracked && git stash drop
   dbranch = branch -D
   graph = log --graph --oneline --all --relative-date --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr)%Creset'
@@ -54,8 +57,8 @@
 [apply]
   whitespace = fix
 [user]
-  name = irfan sharif
-  email = irfanmahmoudsharif@gmail.com
+	name = irfan sharif
+	email = irfanmahmoudsharif@gmail.com
 [credential]
 	helper = store
 [filter "lfs"]

@@ -25,6 +25,8 @@ set nocompatible                          " Make Vim more useful
     Plug 'plasticboy/vim-markdown'
     Plug 'vimwiki/vimwiki'
 
+    Plug 'sindrets/diffview.nvim'
+
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-eunuch'
     Plug 'tpope/vim-fugitive'
@@ -171,6 +173,7 @@ set nocompatible                          " Make Vim more useful
   autocmd BufNewFile,BufRead *.i set filetype=swig
   autocmd BufNewFile,BufRead *.swg set filetype=swig
   autocmd FileType ledger setlocal commentstring=;\ %s
+  autocmd FileType gitcommit setlocal textwidth=72
 " }}}
 
 " Mappings {{{
@@ -317,6 +320,7 @@ set nocompatible                          " Make Vim more useful
     let g:vim_markdown_frontmatter = 0
     let g:vim_markdown_follow_anchor = 1
     " let g:vim_markdown_new_list_item_indent = 2
+    autocmd FileType markdown setlocal conceallevel=2
   " }}}
 
   " syntastic {{{
@@ -411,6 +415,28 @@ set nocompatible                          " Make Vim more useful
     nnoremap <Leader>zs :RG<CR>
     imap <c-o><c-f> <plug>(fzf-complete-path)
 " }}}
+
+  " diffview.nvim {{{
+lua << EOF
+  local actions = require("diffview.actions")
+  local diffview_folds_closed = false
+  require("diffview").setup({
+    keymaps = {
+      file_panel = {
+        { "n", "<space>", actions.toggle_fold, { desc = "Toggle fold" } },
+        { "n", "<leader><space>", function()
+          if diffview_folds_closed then
+            actions.open_all_folds()
+          else
+            actions.close_all_folds()
+          end
+          diffview_folds_closed = not diffview_folds_closed
+        end, { desc = "Toggle all folds" } },
+      },
+    },
+  })
+EOF
+  " }}}
 
   " vimwiki {{{
     " \ 'path': '~/Software/src/github.com/irfansharif/zettel',
@@ -508,6 +534,100 @@ set nocompatible                          " Make Vim more useful
     let g:taskwiki_disable_concealcursor = "yes"
     let g:taskwiki_source_tw_colors = "yes"
   " }}}
+" }}}
+"
+
+autocmd Filetype gitcommit setlocal textwidth=72
+
+" Shelf: ask Claude about visually selected passage via tmux {{{
+if exists('$TMUX')
+lua << EOF
+  local function get_visual_selection()
+    -- Save and restore the unnamed register
+    local save_reg = vim.fn.getreg('"')
+    local save_regtype = vim.fn.getregtype('"')
+
+    -- Yank the visual selection into the unnamed register
+    vim.cmd('noau normal! "vy"')
+    local text = vim.fn.getreg('v')
+
+    -- Restore the unnamed register
+    vim.fn.setreg('"', save_reg, save_regtype)
+
+    return text
+  end
+
+  local function shelf_claude_setup()
+    local text = get_visual_selection()
+    if text == '' then return nil end
+
+    local dir = '/tmp/shelf-claude'
+    vim.fn.system('rm -rf ' .. dir)
+    vim.fn.mkdir(dir, 'p')
+
+    local filepath = vim.fn.expand('%:p')
+
+    -- Store the selected text in selection.txt
+    local selectionfile = dir .. '/selection.txt'
+    local sel = io.open(selectionfile, 'w')
+    sel:write(text)
+    sel:close()
+
+    -- Create CLAUDE.md with context instructions
+    local claudemd = dir .. '/CLAUDE.md'
+    local f = io.open(claudemd, 'w')
+    f:write('The user is reading an article and selected a passage. Answer questions about it.\n\n')
+    f:write('## Article\n\n')
+    f:write('- **File**: `' .. filepath .. '`\n\n')
+    f:write('The full article is at the file path above. Read it in fully first.\n\n')
+    f:write('## Selected passage\n\n')
+    f:write('The selected text is in `selection.txt` in this directory. Keep this top-of-mind while we discuss.\n')
+    f:close()
+
+    -- Launcher script that shows the selection and starts claude
+    local script = dir .. '/launch.sh'
+    local s = io.open(script, 'w')
+    s:write('#!/bin/sh\n')
+    s:write('cd ' .. vim.fn.shellescape(dir) .. ' 2>/dev/null\n')
+    s:write('clear 2>/dev/null\n')
+    s:write('printf "\\033[H\\033[2J\\033[3J"\n')  -- Clear screen and scrollback
+    s:write('echo "\\033[2m"\n')
+    s:write('cat selection.txt\n')
+    s:write('echo "\\033[0m"\n')
+    s:write('unset CLAUDECODE CLAUDE_CODE_ENTRYPOINT\n')  -- Prevent nested Claude monitoring
+    s:write('exec claude --dangerously-skip-permissions --model sonnet --effort low\n')
+    s:close()
+    os.execute('chmod +x ' .. script)
+
+    return dir
+  end
+
+  function _G._shelf_popup()
+    local dir = shelf_claude_setup()
+    if not dir then return end
+    os.execute('tmux display-popup -E -w 60% -h 60% -d ' .. dir .. ' ' .. dir .. '/launch.sh')
+  end
+
+  function _G._shelf_split()
+    local dir = shelf_claude_setup()
+    if not dir then return end
+    os.execute('tmux split-window -v -l 40% -c ' .. dir .. ' ' .. dir .. '/launch.sh')
+  end
+
+  vim.keymap.set('x', '<leader>ac', function()
+    local dir = shelf_claude_setup()
+    if not dir then return end
+    os.execute('tmux display-popup -E -w 60% -h 60% -d ' .. dir .. ' ' .. dir .. '/launch.sh')
+  end, { desc = 'Ask Claude about selection (popup)' })
+
+  vim.keymap.set('x', '<leader>aC', function()
+    local dir = shelf_claude_setup()
+    if not dir then return end
+    os.execute('tmux split-window -v -l 40% -c ' .. dir .. ' ' .. dir .. '/launch.sh')
+  end, { desc = 'Ask Claude about selection (split)' })
+  vim.keymap.set('n', '<leader>nn', 'o[[note]] ', { desc = 'Insert note' })
+EOF
+endif
 " }}}
 
 " vim:foldmethod=marker:foldlevel=1

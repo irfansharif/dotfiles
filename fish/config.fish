@@ -21,4 +21,3 @@ function fish_user_key_bindings
 end
 
 [ -f /opt/homebrew/share/autojump/autojump.fish ]; and source /opt/homebrew/share/autojump/autojump.fish
-

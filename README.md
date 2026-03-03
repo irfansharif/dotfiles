@@ -16,7 +16,7 @@ if ! command -v brew &> /dev/null; then
 fi
 
 # Install required packages.
-brew install tmux fish neovim fd fzf autojump tree htop ripgrep golang gh coreutils graphviz cloc
+brew install tmux fish neovim fd fzf autojump tree htop ripgrep golang gh coreutils graphviz cloc wget git
 
 # Install Oh My Fish.
 if ! command -v omf &> /dev/null; then
