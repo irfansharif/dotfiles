@@ -18,6 +18,9 @@ fi
 # Install required packages.
 brew install tmux fish neovim fd fzf autojump tree htop ripgrep golang gh coreutils graphviz cloc wget git
 
+# Install Python dependencies (used by tmux/stmux.py).
+pip3 install prompt_toolkit
+
 # Install Oh My Fish.
 if ! command -v omf &> /dev/null; then
   curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
@@ -35,7 +38,7 @@ fi
 # Create symlinks.
 ln -sf ${SRCTREE}/tmux/tmux.conf ~/.tmux.conf
 ln -sf ${SRCTREE}/git/gitconfig ~/.gitconfig
-ln -sf ${SRCTREE}/git/git-template ~/.git-template
+mkdir -p ~/.git-template
 ln -sf ${SRCTREE}/git/gitignore-global ~/.gitignore-global
 ln -sf ${SRCTREE}/idea/ideavimrc ~/.ideavimrc
 
@@ -45,6 +48,9 @@ ln -sf ${SRCTREE}/ghostty ~/.config/ghostty
 ln -sf ${SRCTREE}/fish ~/.config/fish
 ln -sf ${SRCTREE}/bat ~/.config/bat
 touch ~/.config/fish/custom.fish
+
+# Install nvim plugins.
+nvim --headless +PlugInstall +qall
 
 echo "Setup complete!"
 ```

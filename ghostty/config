@@ -1,5 +1,5 @@
 # Configuration for Ghostty, a fast, native terminal emulator.
-theme = Builtin Solarized Dark
+theme = iTerm2 Solarized Dark
 
 # Window settings
 window-width = 125
